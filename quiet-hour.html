@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The bell that cancelled quiet hour · Chief Roast Office</title>
+<meta name="description" content="Chief rang a bell to protect silence. Choose a rule, then return to see what it changed. A free fictional office episode.">
+<link rel="canonical" href="https://agentlabstudio.github.io/chief-roast-office/quiet-hour.html">
+<meta property="og:title" content="Chief rang a bell to protect silence."><meta property="og:description" content="Choose the quiet-hour rule. Return and face your decision. A short, free office comedy."><meta property="og:type" content="website"><meta property="og:url" content="https://agentlabstudio.github.io/chief-roast-office/quiet-hour.html"><meta property="og:image" content="https://agentlabstudio.github.io/chief-roast-office/assets/chief-case-019.png"><meta name="twitter:card" content="summary_large_image">
+<style>
+:root{color-scheme:dark;--bg:#11181b;--panel:#1b2428;--text:#eaece3;--muted:#b2b7ae;--gold:#f1bb62;--line:#4a514c}*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top right,#3c3625,transparent 50%),var(--bg);color:var(--text);font:17px/1.6 system-ui,sans-serif}main{width:min(780px,100% - 32px);margin:32px auto 60px}a{color:var(--gold)}a:focus-visible,button:focus-visible{outline:3px solid var(--gold);outline-offset:4px}nav{display:flex;gap:18px;flex-wrap:wrap;font-size:14px}.eyebrow{font:12px/1.5 ui-monospace,monospace;color:var(--gold);letter-spacing:.1em;margin:32px 0 12px}h1{font-size:clamp(32px,6vw,54px);line-height:1.1;letter-spacing:-.035em;margin:0 0 24px}h2{font-size:26px;line-height:1.25}.desk{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:clamp(20px,4vw,32px)}.bell{width:72px;height:72px;color:var(--gold);float:right;margin:0 0 14px 20px}.choices{display:grid;gap:12px;margin-top:26px}button{font:inherit;cursor:pointer;border-radius:10px;border:1px solid var(--line);padding:15px 18px;background:#121b1e;color:var(--text);text-align:left;min-height:48px}button:hover{border-color:var(--gold)}.primary{background:var(--gold);color:#172023;font-weight:750;border:0}.chief{border-left:3px solid var(--gold);padding-left:18px;color:var(--gold)}.privacy{color:var(--muted);font-size:13px}.tools{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}.tools button{font-size:14px}#copy-fallback{width:100%;min-height:170px;font:14px/1.5 monospace;margin-top:14px;padding:12px}footer{border-top:1px solid var(--line);margin-top:26px;padding-top:18px}[hidden]{display:none!important}@media(max-width:450px){main{margin-top:22px}.bell{width:54px;height:54px}.tools button{width:100%}}
+</style></head>
+<body><main>
+<nav aria-label="Office navigation"><a href="index.html">← The office</a><a href="personnel-game.html">Take a personnel shift</a><a href="https://t.me/ChiefRoastOfficeBot">Chief’s Telegram case desk ↗</a></nav>
+<p class="eyebrow">NEW OFFICE INCIDENT · SCRIPTED FICTION</p><h1>The bell that cancelled quiet hour.</h1>
+<section class="desk" aria-labelledby="desk-title">
+<svg class="bell" viewBox="0 0 80 80" fill="none" aria-hidden="true"><path d="M19 57h42l-7-11V31c0-11-6-17-14-17s-14 6-14 17v15zM34 62c0 9 12 9 12 0M40 9V4M13 24l-6-4M67 24l6-4" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg>
+<h2 id="desk-title" tabindex="-1"></h2><p id="scene"></p><div id="choices" class="choices"></div>
+<div id="filed" hidden><p id="choice-filed"></p><p id="chief-line" class="chief"></p><p id="outcome"></p><button id="return" class="primary" type="button">Return to the office · see what changed →</button></div>
+<div id="consequence" hidden><p class="eyebrow">YOUR RULE · THE NEXT VISIT</p><p id="later"></p><p class="chief">Chief: “I rang a bell to protect silence. The objection is well supported.”</p><p>The bell is now under a glass cover labelled ONLY IF NEEDED. The intern has added: “Needed by whom?”</p><div class="tools"><button id="copy" type="button">Copy my office episode</button><button id="another" type="button">Try another rule</button><a id="share" href="https://t.me/share/url" target="_blank" rel="noopener noreferrer">Share voluntarily on Telegram ↗</a></div><textarea id="copy-fallback" aria-label="Episode text to copy" hidden readonly></textarea></div>
+<p id="save-note" class="privacy"></p><p id="status" role="status" aria-live="polite" class="privacy"></p>
+</section>
+<footer class="privacy">An optional fictional episode, separate from your personnel shifts and live Telegram cases. Your choice stays in this browser; no account, analytics or server upload. “Next visit” can be tried now. Clearing browser data removes this episode’s local save. Sharing is your choice.</footer>
+</main><script>
+'use strict';
+(() => {
+ const KEY='chief-quiet-hour-v1';
+ const EPISODE={title:'Chief is protecting silence. Loudly.',setup:'Chief introduces a quiet hour, then rings a brass bell to announce it. The intern asks who may interrupt. Chief hands you the rulebook: one blank page. Choose the rule. Your next visit will face its consequence.',choices:[
+ {label:'Allow interruptions only for a named blocker and a needed decision.',result:'You write a two-line exception rule. Chief lowers the bell.',line:'Urgency has acquired a noun. Encouraging.',later:'The intern brings a blocked handover with the decision clearly named. Quiet hour pauses for that decision, then resumes. You protected attention without abandoning a colleague. One repair remains: name who can make the decision.'},
+ {label:'Hold every request until one scheduled question window.',result:'You mark a question window on the wall clock. Chief puts the bell in a drawer.',line:'A meeting with an actual edge.',later:'Ordinary questions arrive together, but one urgent handover waited too long. Chief revises the rule, not your worth. Order gained; escalation missing. Your repair: add one urgent exception.'},
+ {label:'Let each colleague decide when an interruption is justified.',result:'You leave the rule open and ask colleagues to use judgement. Chief studies the blank page.',line:'A generous policy. Broadly interpretable.',later:'Two fictional colleagues disagree over the same interruption. The intern asks for a shared example, not another slogan. Trust offered; boundaries unclear. Your repair: write one allowed and one deferred example.'}
+ ]};
+ const $=id=>document.getElementById(id);let state=null,storageOK=true;
+ function valid(s){return s&&s.version===1&&Number.isInteger(s.choice)&&s.choice>=0&&s.choice<3&&['filed','returned'].includes(s.stage);}
+ function text(s){const c=EPISODE.choices[s.choice];return'CHIEF ROAST OFFICE · QUIET HOUR\nMy rule: '+c.label+'\nChief: '+c.line+'\nNext visit: '+c.later+'\nScripted fiction · free browser episode\nhttps://agentlabstudio.github.io/chief-roast-office/quiet-hour.html';}
+ function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch{storageOK=false;}}
+ function render(){
+  $('desk-title').textContent=state?'The rule has a consequence.':EPISODE.title;$('scene').textContent=EPISODE.setup;
+  $('choices').hidden=!!state;$('filed').hidden=!state||state.stage!=='filed';$('consequence').hidden=!state||state.stage!=='returned';$('copy-fallback').hidden=true;
+  $('save-note').textContent=storageOK?'Saved only in this browser. Return later, or try the next visit now.':'Local saving is unavailable. You can play this visit while the page stays open.';
+  if(state){const c=EPISODE.choices[state.choice];$('choice-filed').textContent='Your rule: '+c.label;$('chief-line').textContent='Chief: “'+c.line+'”';$('outcome').textContent=c.result;$('later').textContent=c.later;$('share').href='https://t.me/share/url?url='+encodeURIComponent('https://agentlabstudio.github.io/chief-roast-office/quiet-hour.html')+'&text='+encodeURIComponent(text(state));}
+ }
+ function choose(i){if(state||!Number.isInteger(i)||i<0||i>2)return;state={version:1,choice:i,stage:'filed'};save();render();$('desk-title').focus();}
+ function returnVisit(){if(!state||state.stage!=='filed')return;state={...state,stage:'returned'};save();render();$('desk-title').focus();}
+ function again(){state=null;try{localStorage.removeItem(KEY);}catch{storageOK=false;}render();$('desk-title').focus();}
+ if(typeof document==='undefined'){window.roastQuietHour={episode:EPISODE,valid,text,storageKey:KEY};return;}
+ try{const raw=localStorage.getItem(KEY);if(raw){const s=JSON.parse(raw);if(valid(s))state=s;}}catch{storageOK=false;}
+ EPISODE.choices.forEach((c,i)=>{const b=document.createElement('button');b.type='button';b.textContent=c.label;b.dataset.choice=String(i);b.addEventListener('click',()=>choose(i));$('choices').appendChild(b);});
+ $('return').addEventListener('click',returnVisit);$('another').addEventListener('click',again);
+ $('copy').addEventListener('click',async()=>{if(!state)return;const value=text(state);try{if(!navigator.clipboard?.writeText)throw Error('clipboard_unavailable');await navigator.clipboard.writeText(value);$('status').textContent='Episode copied. Share it only where welcome.';}catch{$('copy-fallback').value=value;$('copy-fallback').hidden=false;$('copy-fallback').focus();$('copy-fallback').select();$('status').textContent='Select and copy the episode text below.';}});
+ render();window.roastQuietHour={episode:EPISODE,valid,text,storageKey:KEY};
+})();
+</script></body></html>
