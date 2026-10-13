@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://agentlabstudio.github.io/chief-roast-office/sitemap.xml
