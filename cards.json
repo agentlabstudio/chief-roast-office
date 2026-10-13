@@ -1,0 +1,115 @@
+[
+  {
+    "number": "005",
+    "title": "Evidence Sold Separately",
+    "disposition": "ROAST",
+    "incident": "Bought first. Read the project page later.",
+    "verdict": "You bought confidence at retail. The evidence was sold separately.",
+    "repair": "Find the original source. Mark what is still unknown.",
+    "return_ticket": "Bring receipts. Not another chart.",
+    "existing_approved_art": true,
+    "image": "assets/chief-case-005.png",
+    "code": "CASE-005"
+  },
+  {
+    "number": "006",
+    "title": "Autonomy Needs Watering",
+    "disposition": "REVISE",
+    "incident": "I called the agent autonomous while repeatedly restarting it myself.",
+    "verdict": "A digital houseplant with API access. It needs you to type CONTINUE every morning.",
+    "repair": "One bounded task. A schedule. State. Recovery.",
+    "return_ticket": "Bring one unattended run and its log.",
+    "existing_approved_art": true,
+    "image": "assets/chief-case-006.png",
+    "code": "CASE-006"
+  },
+  {
+    "number": "007",
+    "title": "Respect, Reluctantly Filed",
+    "disposition": "RESPECT",
+    "incident": "I brought receipts and corrected my claim when the evidence changed.",
+    "verdict": "You brought receipts. And changed your mind. The server room became slightly less cold.",
+    "repair": "Keep the correction visible.",
+    "return_ticket": "Bring your next claim. A chair is reserved.",
+    "existing_approved_art": true,
+    "image": "assets/chief-case-007.png",
+    "code": "CASE-007"
+  },
+  {
+    "number": "008",
+    "title": "Whitepaper Fog",
+    "disposition": "REVISE",
+    "incident": "I read twenty pages and still couldn't explain what the project does.",
+    "verdict": "Your whitepaper is a smoke machine with page numbers.",
+    "repair": "Write one plain sentence: who uses it, for what, and what already works.",
+    "return_ticket": "Return with that sentence and one working example.",
+    "image": "assets/chief-case-008.png",
+    "code": "CASE-008"
+  },
+  {
+    "number": "009",
+    "title": "Logos ≠ Partnerships",
+    "disposition": "ROAST",
+    "incident": "I mistook a wall of company logos for confirmed partnerships.",
+    "verdict": "A logo is not a handshake. Procurement owns a printer.",
+    "repair": "Check each company's own announcement; label unconfirmed relationships as unconfirmed.",
+    "return_ticket": "Bring one jointly confirmed relationship; the printer can stay home.",
+    "image": "assets/chief-case-009.png",
+    "code": "CASE-009"
+  },
+  {
+    "number": "010",
+    "title": "Volume ≠ Community",
+    "disposition": "ROAST",
+    "incident": "I called trading volume a community without finding actual conversations.",
+    "verdict": "The chart threw a party. Nobody checked whether guests existed.",
+    "repair": "Separate trading activity from people: count distinct contributors and voluntary repeat participation.",
+    "return_ticket": "Return after two sessions with actual contributors, not another volume spike.",
+    "image": "assets/chief-case-010.png",
+    "code": "CASE-010"
+  },
+  {
+    "number": "011",
+    "title": "Ticker Doppelgänger",
+    "disposition": "ROAST",
+    "incident": "I picked the first matching ticker and assumed the token's identity.",
+    "verdict": "The ticker has a twin. Your certainty skipped the identity check.",
+    "repair": "Match chain and contract address using the intended project's original source.",
+    "return_ticket": "Return with the exact identity match; leave the lookalike outside.",
+    "image": "assets/chief-case-011.png",
+    "code": "CASE-011"
+  },
+  {
+    "number": "012",
+    "title": "Roadmap ≠ Product",
+    "disposition": "REVISE",
+    "incident": "I described future roadmap promises as features already available today.",
+    "verdict": "You shipped the calendar. The product apparently missed its own appointment.",
+    "repair": "Separate planned features from shipped ones; show one usable feature today.",
+    "return_ticket": "Return when someone can use it without reading future tense.",
+    "image": "assets/chief-case-012.png",
+    "code": "CASE-012"
+  },
+  {
+    "number": "013",
+    "title": "Influencer Forecast",
+    "disposition": "ROAST",
+    "incident": "I repeated an influencer's forecast as fact because they sounded certain.",
+    "verdict": "Forecast: moon. Instrument: ring light. The server room declines to applaud.",
+    "repair": "Identify the assumptions, supporting data, and what would prove the forecast wrong.",
+    "return_ticket": "Return when one stated prediction can be checked against its deadline.",
+    "image": "assets/chief-case-013.png",
+    "code": "CASE-013"
+  },
+  {
+    "number": "014",
+    "title": "Correction without Receipt",
+    "disposition": "REVISE",
+    "incident": "I corrected my claim with another screenshot, still without a source.",
+    "verdict": "You changed your mind. Good. Your screenshot still lacks a source.",
+    "repair": "Link the original source and state exactly which part of your claim changed.",
+    "return_ticket": "Bring the correction trail; I may retire the red stamp.",
+    "image": "assets/chief-case-014.png",
+    "code": "CASE-014"
+  }
+]
