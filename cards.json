@@ -167,5 +167,19 @@
     "image": "assets/chief-case-018.png",
     "alt": "Chief reserves a worn chair and a second coffee cup for a returning visitor.",
     "fictional": true
+  },
+  {
+    "number": "019",
+    "code": "CASE-019",
+    "title": "Chief's Own Appraisal",
+    "disposition": "REVISE",
+    "incident": "Chief gave himself an exceptional annual review. The intern asked for one result that wasn't a speech.",
+    "verdict": "You wrote your own review. Even the printer asked for a second opinion.",
+    "repair": "Let one useful result answer for you. Leave room for a correction.",
+    "return_ticket": "Give Chief one fair review in five words. Flattery goes in the other tray.",
+    "chief_note": "I have revised my score from excellent to available.",
+    "image": "assets/chief-case-019.png",
+    "alt": "Original Chief reviews his own EXCEPTIONAL appraisal as an intern requests a second opinion.",
+    "fictional": true
   }
 ]
