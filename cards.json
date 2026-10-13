@@ -111,5 +111,61 @@
     "return_ticket": "Bring the correction trail; I may retire the red stamp.",
     "image": "assets/chief-case-014.png",
     "code": "CASE-014"
+  },
+  {
+    "number": "015",
+    "code": "CASE-015",
+    "title": "The Printer Has Demands",
+    "disposition": "ROAST",
+    "incident": "Chief asked the printer for the grand opening speech. It printed PLEASE WAIT and refused the rest.",
+    "verdict": "The printer has joined management. Delays, supply demands, and no visible output.",
+    "repair": "Cut the opening speech to one useful sentence. Refill the tray. Negotiate in that order.",
+    "return_ticket": "Come back with the printer's three-word job title. The union votes at lunch.",
+    "chief_note": "It has requested an assistant. I have offered a paperclip.",
+    "image": "assets/chief-case-015.png",
+    "alt": "Chief offers a paperclip to a jammed printer demanding PLEASE WAIT.",
+    "fictional": true
+  },
+  {
+    "number": "016",
+    "code": "CASE-016",
+    "title": "The Intern Gets a Desk",
+    "disposition": "RESPECT",
+    "incident": "The intern replaced Chief's thirty-question welcome form with one: What are you trying to do? The waiting room finally answered.",
+    "verdict": "The intern removed twenty-nine questions and found the point. Management calls it insubordination.",
+    "repair": "Keep the question that helps someone take their next step. Let the others earn their place.",
+    "return_ticket": "Name the intern's first assignment. Something smaller than fix everything.",
+    "chief_note": "Promotion approved. Chair pending. The printer has filed an objection.",
+    "image": "assets/chief-case-016.png",
+    "alt": "Chief gives a junior office helper a desk; the printer files an objection.",
+    "fictional": true
+  },
+  {
+    "number": "017",
+    "code": "CASE-017",
+    "title": "Chief Corrects the Stamp",
+    "disposition": "REVISE",
+    "incident": "A visitor said: Your standards are high. Shame you store them in a printer. Then they offered a simpler fix. Chief changed his verdict.",
+    "verdict": "A decent counterjoke. A better correction. My verdict is updated; my dignity is undergoing maintenance.",
+    "repair": "Keep the useful part of a correction, even when it arrives with a punchline.",
+    "return_ticket": "Bring a better line than mine. If it lands and helps, the red stamp becomes amber.",
+    "chief_note": "You may have the last word. This is a limited offer.",
+    "image": "assets/chief-case-017.png",
+    "alt": "Chief replaces a red verdict stamp with an amber REVISE stamp.",
+    "fictional": true
+  },
+  {
+    "number": "018",
+    "code": "CASE-018",
+    "title": "The Reserved Chair",
+    "disposition": "RESPECT",
+    "incident": "A visitor returned after finishing one small change. Chief pulled out a chair and complained about the loss of floor space.",
+    "verdict": "You came back and finished the small thing. A chair is reserved. Please don't turn it into a keynote.",
+    "repair": "Keep what worked. Choose one next improvement small enough to finish.",
+    "return_ticket": "Return with the next small win, or a useful failure. The chair stays.",
+    "chief_note": "Coffee is not a metric. In your case, it is available.",
+    "image": "assets/chief-case-018.png",
+    "alt": "Chief reserves a worn chair and a second coffee cup for a returning visitor.",
+    "fictional": true
   }
 ]

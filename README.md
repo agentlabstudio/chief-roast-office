@@ -2,7 +2,7 @@
 
 A small office for big claims. Bring one idea, get one blunt verdict and one useful fix, then return to the same case.
 
-This buildless public reception contains the existing personnel game and ten fictional case illustrations. Open `index.html` for the reception or `personnel-game.html` for the game. The game runs in the browser without model requests, sign-in, or storage of answers.
+This buildless public reception contains the existing personnel game and fourteen fictional case illustrations. Open `index.html` for the reception or `personnel-game.html` for the game. The game runs in the browser without model requests, sign-in, or storage of answers.
 
 ## Telegram pilot
 
@@ -15,6 +15,6 @@ Open [@ChiefRoastOfficeBot](https://t.me/ChiefRoastOfficeBot) and send `/start`,
 
 The pilot uses prepared Chief responses selected by theme, with a practical correction. It is entertainment and an invitation to improve an idea. Keep personal secrets and financial credentials out of your case.
 
-The gallery cards CASE-005–CASE-014 are fictional office examples, not participant cases. Personnel game reviews use HR-001–HR-008. Live Telegram case IDs remain exactly as issued by the bot. All ten existing PNGs are reused unchanged. The public files contain no private backend configuration, credentials, user records, or development exports.
+The gallery cards CASE-005–CASE-018 are fictional office examples, not participant cases. Personnel game reviews use HR-001–HR-008. Live Telegram case IDs remain exactly as issued by the bot. The ten original PNGs CASE-005–014 are unchanged. CASE-015–018 add four fictional episodes of office life with the same Chief. The public files contain no private backend configuration, credentials, user records, or development exports.
 
-GitHub Pages availability still needs to be verified after these files are deployed. Backend behavior and a full real participant case need their own verification.
+Telegram case handling has been exercised by the founder. External participation and demand are still unverified.
