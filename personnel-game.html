@@ -11,7 +11,7 @@
 
     .choice{display:block;line-height:1.4}.choice strong{display:block;font-size:14px}.choice span{display:block;font-size:12px;color:var(--muted);margin-top:6px}.choice:hover strong{color:var(--amber)}.scene-copy{color:var(--muted);font-size:15px}.shift-progress{width:100%;height:7px;accent-color:var(--amber);margin:0 0 24px}.form h3{font-size:22px;line-height:1.2;margin:0 0 13px}.form h3:focus{outline:none}.chief-feedback{border-left:3px solid var(--amber);padding:10px 0 10px 15px;color:var(--amber);font:14px/1.55 ui-monospace,monospace;margin:18px 0 22px}.tradeoff-note{font-size:12px;color:var(--muted)}.desk{background:#151d21;border:1px solid var(--line);border-radius:12px;padding:19px;margin-top:22px}.desk h3{margin:0;font-size:14px}.desk-score{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:15px 0}.desk-score div{border:1px solid var(--line);border-radius:7px;padding:9px}.desk-score dt{color:var(--muted);font-size:10px}.desk-score dd{margin:2px 0 0;font-size:20px;color:var(--amber)}.desk-log{padding-left:20px;color:var(--muted);font-size:12px}.desk-log li{margin:8px 0}.desk-note{color:var(--muted);font-size:11px}.local-tools{display:flex;align-items:center;gap:14px;margin-top:18px}.local-tools p{margin:0;flex:1}.local-tools button{white-space:nowrap}.clear-confirm{padding:16px;background:#342d20;border:1px solid #806840;border-radius:10px;margin-top:12px}.clear-confirm p{margin:0 0 12px;font-size:13px}.clear-confirm .secondary{margin-right:8px}.paper-ref{white-space:pre-line}.return-note{background:#dfcda6;border:1px dashed #825d30;padding:13px;font-size:13px}.story{margin-top:38px;padding-top:26px;border-top:1px solid var(--line)}.story-grid{display:grid;grid-template-columns:minmax(230px,390px) 1fr;gap:30px;align-items:start}.story img{max-width:100%;height:auto;border-radius:8px}.story h2{font-size:clamp(26px,4vw,38px);line-height:1.15;margin:10px 0 20px}.story p{max-width:570px}.story-label{font-size:11px;color:var(--amber);text-transform:uppercase;letter-spacing:.12em;margin-bottom:4px}.story-text{font-size:16px;margin:0 0 20px}.story-fine{font-size:12px;color:var(--muted)}.shift-end .primary{margin:18px 0 10px}.shift-end .secondary{width:100%}.receipt-note{color:var(--muted);font-size:12px}.archive{margin-top:20px;border-top:1px solid var(--line);padding-top:15px}.archive button{display:block;width:100%;text-align:left;margin-top:8px}.archive summary{font-size:13px;cursor:pointer;color:var(--muted)}@media(max-width:760px){.story-grid{grid-template-columns:1fr}.story img{width:min(100%,400px);margin:auto}.local-tools{align-items:flex-start}.desk-score dt{font-size:9px}.story{margin-top:25px}}@media print{.desk,.story,.local-tools,.clear-confirm{display:none!important}}
   </style>
-</head>
+<style>.actions .secondary{min-height:44px}#return-near-card{border-color:var(--amber);color:var(--amber)}</style></head>
 <body>
   <main class="shell">
     <header class="top">
@@ -63,7 +63,7 @@
           <div id="report" hidden><div class="report-line"><h3>Finding</h3><p id="finding"></p></div><div class="report-line"><h3>Required action</h3><p id="action"></p></div><p id="note" class="note"></p><span id="stamp" class="stamp"></span><p id="return-note" class="return-note"></p></div>
           <div class="paper-footer">FICTIONAL PERSONNEL REVIEW<br>@ChiefRoastAI · The receipt outranks the ego.</div>
         </div>
-        <div id="actions" class="actions" hidden><button id="download" class="secondary" type="button">Download PNG review</button><button id="copy" class="secondary" type="button">Copy review text</button></div>
+        <div id="actions" class="actions" hidden><button id="download" class="secondary" type="button">Download PNG review</button><button id="copy" class="secondary" type="button">Copy review text</button><button id="return-near-card" class="secondary" type="button">Take the return shift · 5 decisions →</button></div>
         <p id="result-status" class="status" role="status" aria-live="polite" aria-atomic="true"></p><label id="copy-label" class="visually-hidden" for="copy-fallback" hidden>Review text to copy</label><textarea id="copy-fallback" class="copy-fallback" readonly hidden></textarea>
         <aside class="desk" aria-labelledby="desk-heading"><h3 id="desk-heading">The shift ledger</h3><dl class="desk-score"><div><dt>Responsibility</dt><dd id="desk-ownership">0</dd></div><div><dt>Useful output</dt><dd id="desk-delivery">0</dd></div><div><dt>Quiet working</dt><dd id="desk-quiet">0</dd></div></dl><p class="desk-note">Fictional game points from your choices. A quiet route can still fail to deliver; a useful one can be noisy.</p><p id="desk-empty" class="desk-note">No decisions filed. The fan has already started.</p><ul id="desk-log" class="desk-log" hidden></ul></aside>
       </section>
@@ -203,7 +203,7 @@
     if(shift===1&&!state.completed.some(item=>item.shift===0))throw new TypeError('First shift not completed.');
     return{...state,shift,answers:[],stage:'question'};
   }
-  function cardText(card){return'CHIEF ROAST OFFICER — PERSONNEL REVIEW\n'+card.code+' · '+SHIFTS[card.shift].title+'\n\nPosition: '+card.title+'\nFinding: '+card.finding+'\nRequired action: '+card.action+'\nChief’s note: '+card.note+'\nStatus: '+card.stamp+'\nReturn ticket: '+card.return_ticket+'\n\nScripted fictional office game · @ChiefRoastAI';}
+  function cardText(card){return'CHIEF ROAST OFFICER — PERSONNEL REVIEW\n'+card.code+' · '+SHIFTS[card.shift].title+'\n\nPosition: '+card.title+'\nFinding: '+card.finding+'\nRequired action: '+card.action+'\nChief’s note: '+card.note+'\nStatus: '+card.stamp+'\nReturn ticket: '+card.return_ticket+'\n\nScripted fictional office game · @ChiefRoastAI\nhttps://agentlabstudio.github.io/chief-roast-office/personnel-game.html';}
   window.roastOfficeGame={shifts:SHIFTS,stories:STORIES,reviewFor,score,newState,validateState,choose,advance,beginShift,cardText,storageKey:STORAGE_KEY};
   window.roastCardText=cardText;
   if(typeof document==='undefined')return;
@@ -221,10 +221,10 @@
   }
   function render(focus=false){
     const shift=SHIFTS[state.shift],size=shift.scenes.length,count=state.answers.length;
-    $('shift-label').textContent=shift.title;$('shift-subtitle').textContent=shift.subtitle;$('progress').textContent=count+' / '+size+' decisions filed';$('shift-progress').max=size;$('shift-progress').value=count;
+    $('shift-label').textContent=shift.title;const firstReview=state.completed.find(item=>item.shift===0);$('shift-subtitle').textContent=state.shift===1&&firstReview?'Your first review: '+reviewFor(firstReview.answers,0).title+'. Today: five new decisions. Chief has kept the chair and the paperwork.':shift.subtitle;$('progress').textContent=count+' / '+size+' decisions filed';$('shift-progress').max=size;$('shift-progress').value=count;
     $('local-status').textContent=storageOK?'Your shift and completed reviews are saved only in this browser. No account, server upload or cross-device sync.':'Local saving is unavailable. Your current shift works until this page closes.';
     for(const id of ['welcome','decision','feedback','shift-end'])$(id).hidden=true;
-    $('actions').hidden=true;$('story').hidden=true;$('copy-fallback').hidden=true;$('copy-label').hidden=true;currentCard=null;
+    $('actions').hidden=true;$('return-near-card').hidden=!(state.stage==='result'&&state.shift===0);$('story').hidden=true;$('copy-fallback').hidden=true;$('copy-label').hidden=true;currentCard=null;
     const stats=score(state.answers,state.shift);$('desk-ownership').textContent=String(stats.ownership);$('desk-delivery').textContent=String(stats.delivery);$('desk-quiet').textContent=String(stats.quiet);$('desk-log').replaceChildren();
     state.answers.slice(-3).forEach((choice,index)=>{const sceneIndex=state.answers.length-Math.min(3,state.answers.length)+index;const li=document.createElement('li');li.textContent=shift.scenes[sceneIndex].choices[choice].result;$('desk-log').appendChild(li);});
     if(state.stage!=='result'){$('empty-message').hidden=false;$('report').hidden=true;$('card-ref').textContent='HR FILE: SEALED\nCLASSIFICATION: FICTION';$('card-heading').textContent='The review is still on Chief’s desk.';}
@@ -245,7 +245,8 @@
   }
   $('start').addEventListener('click',()=>commit(advance(state)));
   $('next').addEventListener('click',()=>commit(advance(state)));
-  $('return-shift').addEventListener('click',()=>{status('The return shift keeps your first review in the local file.');commit(beginShift(state,1));});
+  function startReturn(){status('The return shift keeps your first review in the local file.');commit(beginShift(state,1));}
+  $('return-shift').addEventListener('click',startReturn);$('return-near-card').addEventListener('click',startReturn);
   $('replay').addEventListener('click',()=>{status('A new opening shift. Your earlier reviews stay in the local file.');commit(beginShift(state,0));});
   $('clear-file').addEventListener('click',()=>{clearPending=true;$('clear-confirm').hidden=false;$('confirm-clear').focus();});
   $('cancel-clear').addEventListener('click',()=>{clearPending=false;$('clear-confirm').hidden=true;$('clear-file').focus();});
@@ -260,7 +261,7 @@
     ctx.fillStyle='#202d31';ctx.font='bold 24px sans-serif';ctx.fillText('CHIEF ROAST OFFICER',115,125);ctx.font='18px monospace';ctx.fillText('PERSONNEL REVIEW / '+card.code+' / '+SHIFTS[card.shift].title.toUpperCase(),115,160);ctx.strokeStyle='#202d31';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(115,190);ctx.lineTo(965,190);ctx.stroke();
     let y=242;for(const b of blocks){ctx.fillStyle='#586761';ctx.font='bold 16px sans-serif';ctx.fillText(b.label.toUpperCase(),115,y);y+=34;ctx.fillStyle='#202d31';ctx.font=(b.label==='Position'?'bold ':'')+b.size+'px sans-serif';for(const line of b.lines){ctx.fillText(line,115,y);y+=b.height;}y+=24;}
     ctx.save();ctx.translate(115,y);ctx.rotate(-.045);ctx.strokeStyle='#825d30';ctx.lineWidth=3;ctx.font='bold 22px sans-serif';const width=Math.min(850,ctx.measureText(card.stamp.toUpperCase()).width+34);ctx.strokeRect(0,-28,width,49);ctx.fillStyle='#825d30';ctx.fillText(card.stamp.toUpperCase(),17,5);ctx.restore();
-    const footer=canvas.height-155;ctx.strokeStyle='#9eaa9b';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(115,footer);ctx.lineTo(965,footer);ctx.stroke();ctx.fillStyle='#59665e';ctx.font='16px monospace';ctx.fillText('SCRIPTED FICTIONAL OFFICE GAME',115,footer+31);ctx.fillText('@ChiefRoastAI · THE RECEIPT OUTRANKS THE EGO',115,footer+57);return canvas;
+    const footer=canvas.height-155;ctx.strokeStyle='#9eaa9b';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(115,footer);ctx.lineTo(965,footer);ctx.stroke();ctx.fillStyle='#59665e';ctx.font='16px monospace';ctx.fillText('SCRIPTED FICTIONAL OFFICE GAME',115,footer+31);ctx.fillText('@ChiefRoastAI · THE RECEIPT OUTRANKS THE EGO',115,footer+57);ctx.font='14px monospace';ctx.fillText('agentlabstudio.github.io/chief-roast-office/personnel-game.html',115,footer+83);return canvas;
   }
   window.roastCardCanvas=makeCanvas;
   $('download').addEventListener('click',()=>{if(!currentCard)return;const card=currentCard;try{makeCanvas(card).toBlob(blob=>{if(!blob){status('The PNG could not be created. Copy the review text instead.');return;}const url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download='Chief_Roast_'+card.code+'_shift_'+(card.shift+1)+'.png';document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),10000);status('PNG review ready. Your browser will save it to downloads.');},'image/png');}catch(_){status('The PNG could not be created. Copy the review text instead.');}});
