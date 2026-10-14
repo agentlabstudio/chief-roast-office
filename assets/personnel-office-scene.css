@@ -1,0 +1,21 @@
+/* Original personnel-office miniature. All selectors are isolated from the game form. */
+.chief-stage__figure{display:grid;grid-template-columns:minmax(0,1.8fr) minmax(190px,.8fr);align-items:stretch;margin:0 0 26px;width:100%;max-width:100%;border:1px solid #8c7754;border-radius:8px;overflow:hidden;background:#f4ecd9;color:#443a2b;box-shadow:0 7px 20px #0002;letter-spacing:normal}
+.chief-stage__figure *{box-sizing:border-box;min-width:0}
+.chief-stage__illustration{display:block;width:100%;max-width:100%;height:auto;align-self:center}
+.chief-stage__caption{padding:22px 22px 20px;border-left:1px solid #d5c3a3;align-self:stretch;display:flex;flex-direction:column;justify-content:center;overflow-wrap:anywhere;background:#fff8e8}
+.chief-stage__figure .chief-stage__room{margin:0 0 9px;font:750 10px/1.4 ui-sans-serif,system-ui,sans-serif;text-transform:uppercase;letter-spacing:.12em;color:#886337}
+.chief-stage__figure .chief-stage__title{margin:0 0 11px;font:normal clamp(18px,2.1vw,24px)/1.2 Georgia,"Times New Roman",serif;letter-spacing:-.02em;color:#443a2b}
+.chief-stage__figure .chief-stage__progress{margin:0;font:11px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;color:#76664f}
+.chief-stage__figure .chief-stage__reply{margin:13px 0 0;padding-top:12px;border-top:1px solid #d9c7a7;font:12px/1.55 ui-sans-serif,system-ui,sans-serif;color:#5e4b31}
+.chief-stage__figure .chief-stage__stamp{margin:13px 0 0;font:750 10px/1.45 ui-sans-serif,system-ui,sans-serif;color:#8b6230;text-transform:uppercase;letter-spacing:.04em}
+.chief-stage__figure [hidden]{display:none!important}
+.chief-stage__svg-label{font:650 8px ui-sans-serif,system-ui,sans-serif;letter-spacing:.08em}
+.chief-stage__svg-stamp{font:800 11px ui-sans-serif,system-ui,sans-serif;letter-spacing:.1em}
+.chief-stage__outline{transition:stroke .18s,stroke-width .18s,filter .18s}
+.chief-stage__target[data-active="true"] .chief-stage__outline{stroke:#d49a40;stroke-width:3;filter:drop-shadow(0 0 4px #deaa5b88)}
+.chief-stage__chief[data-speaking="true"] .chief-stage__lamp{fill:#e4a74c}
+.chief-stage__figure [data-chief-stage-sheet]{transition:opacity .18s}
+.chief-stage__figure[data-shift="return"] .chief-stage__caption{background:#f8edd5}
+@media(max-width:560px){.chief-stage__figure{grid-template-columns:minmax(0,1fr);margin-bottom:22px}.chief-stage__caption{padding:16px 18px;border-left:0;border-top:1px solid #d5c3a3}.chief-stage__figure .chief-stage__title{font-size:21px}.chief-stage__figure .chief-stage__reply{margin-top:10px;padding-top:10px}}
+@media(prefers-reduced-motion:reduce){.chief-stage__figure *{transition:none!important;animation:none!important}}
+@media print{.chief-stage__figure{display:none!important}}
