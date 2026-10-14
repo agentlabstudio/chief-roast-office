@@ -226,7 +226,7 @@
   function render(focus=false){
     const shift=SHIFTS[state.shift],size=shift.scenes.length,count=state.answers.length;
     $('shift-label').textContent=shift.title;const firstReview=state.completed.find(item=>item.shift===0);$('shift-subtitle').textContent=state.shift===1&&firstReview?'Your first review: '+reviewFor(firstReview.answers,0).title+'. Today: five new decisions. Chief has kept the chair and the paperwork.':shift.subtitle;$('progress').textContent=count+' / '+size+' decisions filed';$('shift-progress').max=size;$('shift-progress').value=count;
-    $('local-status').textContent=storageOK?'Your shift and completed reviews are saved only in this browser. No account, server upload or cross-device sync.':'Local saving is unavailable. Your current shift works until this page closes.';
+    $('local-status').textContent=storageOK?'Your game shift and reviews stay in this browser, without account or cross-device sync. Optional feedback is sent separately from the noticeboard.':'Local saving is unavailable. Your current shift works until this page closes.';
     for(const id of ['welcome','decision','feedback','shift-end'])$(id).hidden=true;
     $('bot-next-step').hidden=true;$('actions').hidden=true;$('share-telegram').removeAttribute('href');$('telegram-share-note').hidden=true;$('return-near-card').hidden=!(state.stage==='result'&&state.shift===0);$('story').hidden=true;$('copy-fallback').hidden=true;$('copy-label').hidden=true;currentCard=null;
     const stats=score(state.answers,state.shift);$('desk-ownership').textContent=String(stats.ownership);$('desk-delivery').textContent=String(stats.delivery);$('desk-quiet').textContent=String(stats.quiet);$('desk-log').replaceChildren();
