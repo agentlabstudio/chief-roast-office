@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="fi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex,nofollow">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://cdn.jsdelivr.net; style-src 'unsafe-inline'; connect-src 'none'; img-src 'none'; font-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Omistajalompakon osoitetarkistus</title>
+<style>
+:root{color-scheme:light;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#282b2c;background:#f4f4f1}*{box-sizing:border-box}body{margin:0;line-height:1.6}main{width:min(100% - 32px,640px);margin:clamp(24px,8vw,70px) auto;padding:28px;border:1px solid #d6d8d1;border-radius:8px;background:#fff}.label{margin:0 0 10px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#62685d}h1{font-size:clamp(26px,5vw,36px);line-height:1.2;margin:0 0 18px;font-weight:650;letter-spacing:-.03em}p{margin:0 0 17px}.account{font-size:13px;color:#62685d}button{font:650 15px/1.4 system-ui,sans-serif;border:1px solid #344239;border-radius:5px;background:#344239;color:white;padding:14px 18px;min-height:48px;width:100%;cursor:pointer;margin:4px 0 20px;white-space:normal}button:hover:not(:disabled){background:#253329}button:disabled{opacity:.65;cursor:default}button:focus-visible,input:focus-visible{outline:3px solid #a4762e;outline-offset:4px}.status{font-size:18px;font-weight:650;line-height:1.4;margin-bottom:10px;overflow-wrap:anywhere}.status[data-result="different"]{color:#813c2c}.status[data-result="match"]{color:#315942}.detail{font-size:13px;color:#62685d;min-height:20px;overflow-wrap:anywhere}.address-box{margin:18px 0 24px}label{display:block;font-size:12px;font-weight:650;margin-bottom:7px}input{font:12px/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;color:#353b36;background:#f8f9f5;border:1px solid #d6d8d1;border-radius:4px;padding:11px;width:100%;min-width:0;max-width:100%}.note{padding-top:18px;border-top:1px solid #d6d8d1;font-size:12px;color:#62685d;margin-bottom:0}[hidden]{display:none!important}@media(max-width:420px){main{padding:22px 18px}input{font-size:11px}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+</style>
+<script defer src="https://cdn.jsdelivr.net/npm/@farcaster/miniapp-sdk@0.3.0/dist/index.min.js" integrity="sha384-beLmJBUsOVZDPvWF5LCmz4UP6gk416oF7g703CTEeWuXppHfGUpxoeR9WpkIC3GN" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script defer src="owner-wallet-check.js"></script>
+</head>
+<body>
+<main>
+<p class="label">Vain diagnostiikka</p>
+<h1>Omistajalompakon osoite</h1>
+<p class="account">chiefroastoffice · FID 3354501</p>
+<p>Painike pyytää vain lompakon julkisen osoitteen. Mitään ei allekirjoiteta eikä tapahtumaa lähetetä.</p>
+<button id="owner-check-button" type="button" disabled>Tarkista lompakon osoite</button>
+<p id="owner-check-status" class="status" role="status" aria-live="polite" aria-atomic="true">Vertailuosoite puuttuu; avaa perustajan oma tarkistuslinkki</p>
+<p id="owner-check-detail" class="detail"></p>
+<div id="owner-check-address-box" class="address-box" hidden><label for="owner-check-address">Luettu osoite — vain tässä näkymässä</label><input id="owner-check-address" readonly spellcheck="false" autocomplete="off" aria-describedby="owner-check-detail"></div>
+<div class="address-box"><label for="owner-check-expected">Tarkistuslinkin paikallinen vertailuosoite</label><input id="owner-check-expected" readonly spellcheck="false" autocomplete="off"></div>
+<p class="note">Vertailuosoite luetaan vain tämän sivun URL-fragmentista. Selain ei lähetä sivun fragmenttia tämän sivun HTTP-pyynnössä. Luettu lompakko-osoite näkyy vain paikallisessa käyttöliittymässä; sivu ei lähetä telemetriaa tai tallenna osoitteita. Voit valita osoitetekstin ja kopioida sen itse. MiniApp-isännän ja lompakkopalvelun omat käytännöt ovat erillisiä.<br><br>Tämä on esikatselun yhteystesti. Se ei vahvista MiniApp-manifestia, allekirjoitusvaltuutusta tai julkaisulupaa.</p>
+<noscript><p>Lompakkoyhteyden tarkistus tarvitsee JavaScriptin. Osoitetta ei ole pyydetty.</p></noscript>
+</main>
+</body>
+</html>
