@@ -13,7 +13,7 @@
     const badge=el('p','eyebrow','Repair desk / four consequential decisions');
     const title=el('h2','repair__title','A title is nice. Can you close a ticket?');title.id='repair-title';title.tabIndex=-1;
     const chief=el('div','repair__chief');chief.setAttribute('aria-hidden','true');
-    // Original code-drawn Chief: paperclip antenna, amber eyes, crooked coffee-cup lapel.
+    // Original code-drawn Chief: paperclip antenna, amber eyes and crooked tie.
     const ns='http://www.w3.org/2000/svg',portrait=document.createElementNS(ns,'svg');portrait.setAttribute('viewBox','0 0 150 155');portrait.setAttribute('focusable','false');
     function shape(tag,attrs) {const node=document.createElementNS(ns,tag);for(const [k,v]of Object.entries(attrs))node.setAttribute(k,String(v));portrait.appendChild(node);return node;}
     shape('path',{d:'M72 29V14q0-9 7-9q8 0 8 8v9','stroke':'#443a2b','stroke-width':3,fill:'none'});
@@ -23,6 +23,7 @@
     const mouth=shape('path',{d:'M64 76H88',fill:'none',stroke:'#eee3c4','stroke-width':3,'stroke-linecap':'round'});
     shape('path',{d:'M36 153V126q0-15 18-15h45q18 0 18 15v27',fill:'#323c39',stroke:'#443a2b','stroke-width':3});
     shape('path',{d:'M57 111l19 17l20-17',fill:'#f4ecd9'});
+    shape('path',{d:'M73 120l8 4l-4 8l9 18l-12 4l-6-20l4-8z',fill:'#bf8743',stroke:'#443a2b','stroke-width':1.5});
     shape('path',{d:'M97 131h10v9q-2 5-8 0zM107 132q10-2 7 6h-6',fill:'#f4ecd9',stroke:'#a48247','stroke-width':2});
     chief.appendChild(portrait);
     add(header,add(el('div'),badge,title),chief);panel.appendChild(header);
@@ -36,7 +37,7 @@
       const raw=localStorage.getItem(model.storageKey);
       if(raw){const parsed=JSON.parse(raw);if(parsed.version!==1 || !Array.isArray(parsed.completed)||parsed.completed.length>7)throw Error('Invalid repair archive');
         file={version:1,current:parsed.current?model.validate(parsed.current):null,completed:parsed.completed.map(item=>{const saved=model.validate(item);if(saved.stage!=='result')throw Error('Invalid receipt');return saved;})};}
-    } catch (_) {loadMessage='The repair file could not be opened. A new local repair is available.';}
+    } catch (_) {storageOK=false;loadMessage='The repair file could not be opened. This repair can be played on this page; local saving has not been confirmed.';}
     function save() {try{localStorage.setItem(model.storageKey,JSON.stringify(file));storageOK=true;}catch(_){storageOK=false;}}
     function speak(mood) {panel.dataset.mood=mood;mouth.setAttribute('d',mood==='filed'?'M62 73q13 11 28 0':mood==='open'?'M63 79q13-9 27 0':'M64 76H88');left.setAttribute('height',mood==='filed'?8:12);right.setAttribute('height',mood==='open'?6:12);}
     function commit(next) {const previous=file.current;file.current=next;
@@ -104,7 +105,7 @@
       if(source&&!panel.hidden)render(false);
     }
     document.addEventListener('chief:shift-render',event=>update(event.detail));
-    document.addEventListener('chief:local-clear',()=>{try{localStorage.removeItem(model.storageKey);}catch(_){}file={version:1,current:null,completed:[]};source=null;panel.hidden=true;status.textContent='';});
+    document.addEventListener('chief:local-clear',event=>{let cleared=false;try{localStorage.removeItem(model.storageKey);cleared=localStorage.getItem(model.storageKey)===null;}catch(_){}if(event.detail)event.detail.repairCleared=cleared;file={version:1,current:null,completed:[]};source=null;panel.hidden=true;status.textContent='';storageOK=cleared;});
     update();
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();

@@ -18,7 +18,7 @@
 .repair__question{font-size:21px;line-height:1.25;margin:24px 0 15px;color:var(--paper)}
 .repair__question:focus,.repair__title:focus{outline:none}
 .repair .choice{min-height:65px}
-.repair .choice:disabled{opacity:.65;border-style:dashed}
+.repair .choice:disabled{opacity:1;border-style:dashed;cursor:not-allowed}
 .repair .choice .repair__blocked{color:#edc18f;margin-top:8px;font-size:12px}
 .repair__chief-line{font:14px/1.6 ui-monospace,monospace;color:var(--amber);border-left:3px solid var(--amber);padding:10px 0 10px 15px;margin:18px 0}
 .repair__consequence{font-size:17px;line-height:1.6;color:var(--paper)}
