@@ -182,5 +182,20 @@
     "alt": "Original Chief reviews his own EXCEPTIONAL appraisal as an intern requests a second opinion.",
     "fictional": true,
     "theme_family": "office"
+  },
+  {
+    "number": "020",
+    "code": "CASE-020",
+    "title": "The Fan Takes the Shift",
+    "disposition": "RESPECT",
+    "incident": "Chief reluctantly respects the old working server fan; tiny SHIFT COMPLETE note near fan, desk/server rack/warm amber continuity.",
+    "verdict": "The fan completed its shift without announcing a new era.",
+    "repair": "Keep one useful thing running. Write down what it actually did.",
+    "return_ticket": "Name one small thing that worked quietly. The fan will not demand a speech.",
+    "chief_note": "It has declined my offer of a leadership podcast.",
+    "image": "assets/chief-case-020.png",
+    "alt": "Original cream robot Chief gives a reluctant thumbs-up to an old desk fan in the amber server room. CASE-020, RESPECT: The Fan Takes the Shift. The fan completed its shift without announcing a new era. Repair: keep one useful thing running and record what it did. Return: name one small thing that worked quietly.",
+    "fictional": true,
+    "theme_family": "office"
   }
 ]
