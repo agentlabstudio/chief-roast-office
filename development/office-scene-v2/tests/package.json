@@ -1,0 +1,6 @@
+{
+  "name": "chief-office-scene-tests",
+  "private": true,
+  "scripts": { "test": "node --test personnel-office-scene.test.cjs" },
+  "devDependencies": { "jsdom": "26.1.0" }
+}
