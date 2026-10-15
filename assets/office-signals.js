@@ -73,9 +73,7 @@
     const heading = element('h2', 'chief-signals__title', 'Office noticeboard');
     heading.id = 'chief-signals-title';
     const kicker = element('p', 'chief-signals__kicker', 'Visits & feedback');
-    const refresh = element('button', 'chief-signals__refresh', 'Refresh counts');
-    refresh.type = 'button';
-    append(panel, append(element('div', 'chief-signals__header'), append(element('div'), kicker, heading), refresh));
+    append(panel, append(element('div', 'chief-signals__header'), append(element('div'), kicker, heading)));
     if (preview) append(panel, element('p', 'chief-signals__preview', 'Development preview · visits and test feedback are excluded from public counts.'));
 
     const table = element('table', 'chief-signals__table');
@@ -175,7 +173,6 @@
     function busy(value, feedback) {
       activeRequest = value;
       feedbackActive = value && feedback;
-      refresh.disabled = value || !session;
       submit.disabled = value || !session;
       text.disabled = feedbackActive;
       topic.disabled = feedbackActive;
@@ -223,11 +220,10 @@
         if (result.counted !== undefined && typeof result.counted !== 'boolean') throw new Error('Unconfirmed visit');
         renderStats(result.stats, result.intake_limit);
       } catch (_) {
-        countStatus.textContent = intakeMessage(confirmedStats ? 'Could not refresh counts. Previous confirmed counts are still shown.' : 'Counts are unavailable right now. Try Refresh counts.');
+        countStatus.textContent = intakeMessage(confirmedStats ? 'Counts could not be updated. Previous confirmed counts are still shown.' : 'Counts are unavailable right now. You can continue using the office.');
       } finally { busy(false, false); }
     }
 
-    refresh.addEventListener('click', function () { counts('stats'); });
     form.addEventListener('submit', async function (event) {
       event.preventDefault();
       if (activeRequest || !session) return;
