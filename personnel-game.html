@@ -12,7 +12,7 @@
     .choice{display:block;line-height:1.4}.choice strong{display:block;font-size:14px}.choice span{display:block;font-size:12px;color:var(--muted);margin-top:6px}.choice:hover strong{color:var(--amber)}.scene-copy{color:var(--muted);font-size:15px}.shift-progress{width:100%;height:7px;accent-color:var(--amber);margin:0 0 24px}.form h3{font-size:22px;line-height:1.2;margin:0 0 13px}.form h3:focus{outline:none}.chief-feedback{border-left:3px solid var(--amber);padding:10px 0 10px 15px;color:var(--amber);font:14px/1.55 ui-monospace,monospace;margin:18px 0 22px}.tradeoff-note{font-size:12px;color:var(--muted)}.desk{background:#151d21;border:1px solid var(--line);border-radius:12px;padding:19px;margin-top:22px}.desk h3{margin:0;font-size:14px}.desk-score{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:15px 0}.desk-score div{border:1px solid var(--line);border-radius:7px;padding:9px}.desk-score dt{color:var(--muted);font-size:10px}.desk-score dd{margin:2px 0 0;font-size:20px;color:var(--amber)}.desk-log{padding-left:20px;color:var(--muted);font-size:12px}.desk-log li{margin:8px 0}.desk-note{color:var(--muted);font-size:11px}.local-tools{display:flex;align-items:center;gap:14px;margin-top:18px}.local-tools p{margin:0;flex:1}.local-tools button{white-space:nowrap}.clear-confirm{padding:16px;background:#342d20;border:1px solid #806840;border-radius:10px;margin-top:12px}.clear-confirm p{margin:0 0 12px;font-size:13px}.clear-confirm .secondary{margin-right:8px}.paper-ref{white-space:pre-line}.return-note{background:#dfcda6;border:1px dashed #825d30;padding:13px;font-size:13px}.story{margin-top:38px;padding-top:26px;border-top:1px solid var(--line)}.story-grid{display:grid;grid-template-columns:minmax(230px,390px) 1fr;gap:30px;align-items:start}.story img{max-width:100%;height:auto;border-radius:8px}.story h2{font-size:clamp(26px,4vw,38px);line-height:1.15;margin:10px 0 20px}.story p{max-width:570px}.story-label{font-size:11px;color:var(--amber);text-transform:uppercase;letter-spacing:.12em;margin-bottom:4px}.story-text{font-size:16px;margin:0 0 20px}.story-fine{font-size:12px;color:var(--muted)}.shift-end .primary{margin:18px 0 10px}.shift-end .secondary{width:100%}.receipt-note{color:var(--muted);font-size:12px}.archive{margin-top:20px;border-top:1px solid var(--line);padding-top:15px}.archive button{display:block;width:100%;text-align:left;margin-top:8px}.archive summary{font-size:13px;cursor:pointer;color:var(--muted)}@media(max-width:760px){.story-grid{grid-template-columns:1fr}.story img{width:min(100%,400px);margin:auto}.local-tools{align-items:flex-start}.desk-score dt{font-size:9px}.story{margin-top:25px}}@media print{.desk,.story,.local-tools,.clear-confirm{display:none!important}}
   .actions a.secondary{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;line-height:1.35;text-align:center}
   </style>
-<style>.actions .secondary{min-height:44px}#return-near-card{border-color:var(--amber);color:var(--amber)}</style><link rel="stylesheet" href="assets/office-signals.css?v=20261014a"><script defer src="assets/office-signals.js?v=20261014a"></script><link rel="stylesheet" href="assets/personnel-office-scene.css?v=20261014"><script defer src="assets/personnel-office-scene.js?v=20261014"></script></head>
+<style>.actions .secondary{min-height:44px}#return-near-card{border-color:var(--amber);color:var(--amber)}</style><link rel="stylesheet" href="assets/office-signals.css?v=20261014a"><script defer src="assets/office-signals.js?v=20261014a"></script><link rel="stylesheet" href="assets/personnel-office-scene.css?v=20261015v2"><script defer src="assets/personnel-office-scene.js?v=20261015v2"></script><link rel="stylesheet" href="assets/personnel-repair.css?v=20261014b"><script defer src="assets/personnel-repair-model.js?v=20261014b"></script><script defer src="assets/personnel-repair.js?v=20261014b"></script></head>
 <body data-chief-site="personnel">
   <main class="shell">
     <header class="top">
@@ -21,9 +21,9 @@
     </header>
     <nav aria-label="Office navigation" style="margin-top:18px;font-size:14px"><a href="index.html" style="color:inherit">← Back to the office</a> · <a href="https://t.me/ChiefRoastOfficeBot" style="color:inherit">Bring your idea to Telegram ↗</a> · <a href="#office-noticeboard" style="color:inherit">Visits &amp; feedback</a></nav>
     <section class="intro" aria-labelledby="page-title">
-      <p class="eyebrow">Office induction / two shifts</p>
+      <p class="eyebrow">Office induction / two shifts + repair desk</p>
       <h1 id="page-title">The office needs<br>someone on shift.</h1>
-      <p>The printer wants a promotion. The intern wants one useful question. Chief wants the last word. Make six decisions, see what follows, and earn your personnel review. Then return to an office that remembers your first shift in this browser.</p>
+      <p>The printer wants a promotion. The intern wants one useful question. Chief wants the last word. Make six decisions and earn your personnel review. Then open the four-decision repair desk: your earlier choices change the time, evidence and help you have. A second shift waits when you return to this browser.</p>
     </section>
     <div class="grid">
       <section id="review-form" class="form" aria-labelledby="shift-label">
@@ -196,7 +196,7 @@
     const state=validateState(value);
     if(state.stage==='welcome'){state.stage='question';return state;}
     if(state.stage!=='feedback')throw new TypeError('Continue after a decision.');
-    if(state.answers.length===SHIFTS[state.shift].scenes.length){state.stage='result';state.completed.push({shift:state.shift,answers:state.answers.slice()});if(state.completed.length>6){const first=state.completed.find(item=>item.shift===0),recent=state.completed.slice(-5);state.completed=recent.includes(first)?recent:[first,...recent];}}else state.stage='question';
+    if(state.answers.length===SHIFTS[state.shift].scenes.length){state.stage='result';state.completed.push({shift:state.shift,answers:state.answers.slice()});if(state.completed.length>6){const opening=state.completed.filter(item=>item.shift===0).at(-1),recent=state.completed.slice(-5);state.completed=recent.includes(opening)?recent:[opening,...recent];}}else state.stage='question';
     return state;
   }
   function beginShift(value,shift){
@@ -212,6 +212,7 @@
   const $=id=>document.getElementById(id);
   let state=newState(),storageOK=true,currentCard=null,clearPending=false,loadMessage='';
   try{const saved=localStorage.getItem(STORAGE_KEY);if(saved){state=validateState(JSON.parse(saved));loadMessage='Your local office file was reopened.';}}catch(_){storageOK=false;loadMessage='The local file could not be opened. This shift will work on this page.';}
+  window.roastOfficeGame.getState=()=>validateState(state);
   function save(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));storageOK=true;}catch(_){storageOK=false;}}
   function status(text){$('result-status').textContent=text;}
   function commit(next){state=next;save();render(true);}
@@ -246,6 +247,7 @@
     }
     const logBlank=state.answers.length===0;$('desk-empty').hidden=!logBlank;$('desk-log').hidden=logBlank;
     if(focus){const target=state.stage==='question'?$('scene-heading'):state.stage==='feedback'?$('feedback-heading'):state.stage==='result'?$('card-heading'):$('welcome-heading');target.focus();}
+    document.dispatchEvent(new CustomEvent('chief:shift-render',{detail:validateState(state)}));
   }
   $('start').addEventListener('click',()=>commit(advance(state)));
   $('next').addEventListener('click',()=>commit(advance(state)));
@@ -254,7 +256,7 @@
   $('replay').addEventListener('click',()=>{status('A new opening shift. Your earlier reviews stay in the local file.');commit(beginShift(state,0));});
   $('clear-file').addEventListener('click',()=>{clearPending=true;$('clear-confirm').hidden=false;$('confirm-clear').focus();});
   $('cancel-clear').addEventListener('click',()=>{clearPending=false;$('clear-confirm').hidden=true;$('clear-file').focus();});
-  $('confirm-clear').addEventListener('click',()=>{if(!clearPending)return;try{localStorage.removeItem(STORAGE_KEY);}catch(_){}clearPending=false;state=newState();$('clear-confirm').hidden=true;render(true);status('This browser’s office file was cleared. A new shift is ready.');});
+  $('confirm-clear').addEventListener('click',()=>{if(!clearPending)return;let cleared=false;try{localStorage.removeItem(STORAGE_KEY);cleared=localStorage.getItem(STORAGE_KEY)===null;}catch(_){}const detail={storageCleared:cleared,repairCleared:true};document.dispatchEvent(new CustomEvent('chief:local-clear',{detail}));clearPending=false;state=newState();$('clear-confirm').hidden=true;render(true);status(cleared&&detail.repairCleared?'This browser’s office file was cleared. A new shift is ready.':'The shift was reset on this page, but saved data could not be fully cleared. It may return after reload. Use your browser’s site-data controls to remove it.');});
   $('copy').addEventListener('click',async()=>{if(!currentCard)return;const text=cardText(currentCard);try{if(!navigator.clipboard?.writeText)throw Error('Clipboard unavailable');await navigator.clipboard.writeText(text);status('Review text copied. You choose where to share it.');}catch(_){$('copy-fallback').value=text;$('copy-fallback').hidden=false;$('copy-label').hidden=false;$('copy-fallback').focus();$('copy-fallback').select();status('Automatic copying was unavailable. Copy the selected review below.');}});
   function wrappedLines(ctx,text,maxWidth){const lines=[];for(const paragraph of String(text).split('\n')){let line='';for(const word of paragraph.split(/\s+/)){const next=line?line+' '+word:word;if(ctx.measureText(next).width>maxWidth&&line){lines.push(line);line=word;}else line=next;}lines.push(line);}return lines;}
   function makeCanvas(card){
