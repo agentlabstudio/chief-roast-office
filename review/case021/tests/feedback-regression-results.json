@@ -1,0 +1,23 @@
+{
+  "passed": 79,
+  "failed": 0,
+  "test_method": "Actual frontend script in a local simulated DOM with controlled fetch, crypto and sessionStorage",
+  "network_requests_sent": 0,
+  "remote_changes": 0,
+  "browser_layout_review_required": true,
+  "minimum_feedback_characters": 3,
+  "groups": [
+    "four site IDs and one-call load",
+    "stats validation and honest unavailable states",
+    "session reuse, storage fallback and game-save isolation",
+    "optional form accessibility and AI-assisted privacy copy",
+    "stable retry request IDs and one active request",
+    "honeypot, length/topic bounds and hostile text",
+    "scoped responsive CSS and bounded request timeout",
+    "explicit preview bodies and test-only feedback acknowledgment",
+    "noticeboard anchor, office link and intake-limit notice",
+    "six opt-in coffee routes and static personnel build context",
+    "context-aware text bounds, retry identity and hostile query rejection",
+    "neutral feedback return link and optional return self-report"
+  ]
+}

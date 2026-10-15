@@ -1,0 +1,40 @@
+{
+  "pass": true,
+  "personnel_dom_groups": 8,
+  "canvas_text_bounds_fixtures": 9,
+  "coffee_routes": [
+    {
+      "route": "plain/show",
+      "title": "Coffee, with a handover.",
+      "result": "You show the first refill. The intern makes the next pot without summoning Chief. The policy stack keeps a ring off the desk."
+    },
+    {
+      "route": "plain/point",
+      "title": "A clear rule. A cold pot.",
+      "result": "The newcomer can read the notice but cannot use the machine. The instruction survives; the refill waits for help."
+    },
+    {
+      "route": "sign/replace",
+      "title": "Register closed. Kettle open.",
+      "result": "You retire the signed cup history and make the refill with the intern. The next person has a task instead of a clearance process."
+    },
+    {
+      "route": "sign/audit",
+      "title": "Fully compliant. Still empty.",
+      "result": "Every signature is accounted for. Chief signs the audit. The coffee is still absent, but its absence is now impeccably documented."
+    },
+    {
+      "route": "none/assign",
+      "title": "One duty returns.",
+      "result": "You make the first refill and put the sentence by the kettle. The intern takes the next last cup and starts another pot. Chief keeps the wall free of appendices."
+    },
+    {
+      "route": "none/wait",
+      "title": "The pot awaits a volunteer.",
+      "result": "Everyone leaves space for someone else to act. The pot stays empty. The fan completes another revolution without volunteering."
+    }
+  ],
+  "replay_resets": 6,
+  "network_requests_sent": 0,
+  "method": "Actual scripts in a minimal simulated DOM. No browser, layout, image-load or physical-device claims."
+}

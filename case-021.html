@@ -57,7 +57,7 @@
             </div>
             <p class="fine">Two decisions filed. This receipt follows the route you chose; it is a fictional office outcome.</p>
             <div class="action-row"><button class="primary" type="button" id="replay">Try another coffee policy</button><a class="secondary" href="personnel-game.html">Return to personnel</a></div>
-            <p style="margin:18px 0 0"><a href="index.html?file=021#office-life">Leave the receipt at office life →</a></p>
+            <p style="margin:18px 0 0"><a id="episode-feedback" href="index.html?feedback=coffee-20261015#game-feedback">Optional feedback for the development team →</a></p><p class="fine">Which choice changed the outcome? Tell us what was clear or confusing, if you wish. The feedback form is separate from the story.</p><p><a href="index.html?file=021#office-life">Read the original office file →</a></p>
           </div>
           <p class="fine" style="border-top:1px solid var(--line);padding-top:16px;margin-top:24px">Scripted fiction. No sign-in. Your decisions stay on this page and reset when you reload.</p>
         </section>
@@ -94,6 +94,9 @@
     };
     let policy = null;
     let phase = 'policy';
+    const preview = new URLSearchParams(window.location.search).get('chief_preview') === '1';
+    const feedbackBase = 'index.html?feedback=coffee-20261015' + (preview ? '&chief_preview=1' : '');
+    $('episode-feedback').href = feedbackBase + '#game-feedback';
     function focus(id){$(id).focus();}
     function status(done){$('progress').value=done;$('progress-text').textContent=done===2?'2 decisions filed':'Decision '+(done+1)+' of 2';}
     $('choices').addEventListener('click', event => {
@@ -109,6 +112,7 @@
       }else if(phase==='test'){
         const ending=endings[policy+'/'+button.dataset.action];
         if(!ending)return;
+        $('episode-feedback').href=feedbackBase+'&route='+encodeURIComponent(policy+'/'+button.dataset.action)+'#game-feedback';
         phase='ending';status(2);$('decision').hidden=true;$('ending').hidden=false;
         for(const [id,key] of [['ending-heading','title'],['ending-rule','rule'],['ending-result','result'],['ending-next','next'],['ending-chief','chief'],['ending-stamp','stamp']])$(id).textContent=ending[key];
         focus('ending-heading');
@@ -129,6 +133,7 @@
     });
     $('replay').addEventListener('click',()=>{
       // Rebuild the initial controls without navigating or retaining a previous route.
+      $('episode-feedback').href=feedbackBase+'#game-feedback';
       policy=null;phase='policy';status(0);$('ending').hidden=true;$('feedback').hidden=true;$('decision').hidden=false;
       $('scene-heading').textContent='What stays on the coffee notice?';
       $('scene-copy').textContent='The useful instruction is buried on page nineteen: leave enough for the next person. Chief insists the cover sheet is doing valuable work.';
