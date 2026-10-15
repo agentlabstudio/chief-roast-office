@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>Illustrated office — development review</title>
+  <style>
+    :root{color-scheme:dark;font-family:system-ui,sans-serif;background:#101619;color:#e8edea}
+    *{box-sizing:border-box}body{margin:0}main{width:min(1400px,100% - 32px);margin:24px auto}
+    h1{font-size:clamp(23px,4vw,34px);line-height:1.2;margin:0 0 12px}
+    p{line-height:1.5;max-width:850px;color:#c2cbc5}
+    nav{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:20px 0}
+    button,a{font:inherit}button{min-height:44px;padding:9px 14px;border:1px solid #8c7754;background:#192125;color:#e8edea;border-radius:7px;cursor:pointer}
+    button[aria-pressed="true"]{background:#f1bb62;color:#152025}button:focus-visible,a:focus-visible{outline:3px solid #f1bb62;outline-offset:4px}a{color:#f1bb62}
+    #layout-status{font-size:14px;margin:12px 0}
+    .viewport{width:390px;max-width:100%;margin:0 auto;border:1px solid #8c7754;border-radius:9px;overflow:hidden;background:#192125}
+    .viewport[data-mode="desktop"]{width:100%}
+    iframe{display:block;width:100%;height:844px;border:0;background:#101619}
+    .note{font-size:13px}
+  </style>
+</head>
+<body>
+<main>
+  <h1>Chief’s illustrated office · review preview</h1>
+  <p>Preview of review commit <code>0db4d6a</code>. This page is publicly reachable and excluded from search indexing. It contains public game material. Game saves use a separate preview file in this browser.</p>
+  <nav aria-label="Review layout">
+    <button id="narrow" type="button" aria-pressed="true" aria-controls="game-frame">390 px layout</button>
+    <button id="desktop" type="button" aria-pressed="false" aria-controls="game-frame">Full width layout</button>
+    <a href="personnel-game.html?chief_preview=1">Open preview as full browser page</a>
+    <a href="../personnel-game.html">Current public game</a>
+  </nav>
+  <p id="layout-status" role="status">Narrow browser layout: up to 390 px wide, 844 px high.</p>
+  <p class="note">The narrow frame checks browser layout at this width. It does not emulate Android or iOS hardware. Full-width mode uses the available browser width.</p>
+  <div id="viewport" class="viewport" data-mode="narrow">
+    <iframe id="game-frame" title="Illustrated Chief game development preview" src="personnel-game.html?chief_preview=1" width="390" height="844"></iframe>
+  </div>
+</main>
+<script>
+(function () {
+  'use strict';
+  const viewport = document.getElementById('viewport');
+  const narrow = document.getElementById('narrow');
+  const desktop = document.getElementById('desktop');
+  const status = document.getElementById('layout-status');
+  function layout(mode) {
+    viewport.dataset.mode = mode;
+    const isNarrow = mode === 'narrow';
+    narrow.setAttribute('aria-pressed', String(isNarrow));
+    desktop.setAttribute('aria-pressed', String(!isNarrow));
+    status.textContent = isNarrow
+      ? 'Narrow browser layout: up to 390 px wide, 844 px high.'
+      : 'Full width browser layout: available width, 844 px high.';
+  }
+  narrow.addEventListener('click', function () { layout('narrow'); });
+  desktop.addEventListener('click', function () { layout('desktop'); });
+})();
+</script>
+</body>
+</html>
