@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark">
   <meta name="theme-color" content="#101619">
-  <meta name="description" content="Chief’s coffee has twenty-seven pages of terms. Make two decisions, test a simpler rule, and collect a fictional office receipt. No sign-in.">
+  <meta name="description" content="Chief’s coffee has twenty-seven pages of terms. Make two decisions, then optionally return to see how your rule works on the next shift. No sign-in.">
   <title>The Coffee Has Terms · CASE-021 · Chief Roast Office</title>
   <style>
     :root{--bg:#101619;--panel:#192125;--line:#384246;--text:#e8edea;--muted:#adb7b3;--amber:#f1bb62;--paper:#ebdfc5;--ink:#202d31}
@@ -22,7 +22,7 @@
     <nav class="nav" aria-label="Office navigation"><a href="personnel-game.html">← Personnel game</a><a href="index.html?file=021#office-life">Back to office life</a></nav>
     <main>
       <section class="intro" aria-labelledby="page-title">
-        <p class="eyebrow">A small continuation · about a minute · two decisions</p>
+        <p class="eyebrow">A small continuation · two decisions · an optional return</p>
         <h1 id="page-title">The Coffee Has Terms.</h1>
         <p class="lead">Chief has a cup of coffee and twenty-seven pages of policy. The intern has asked which page contains the coffee. You have the pen.</p>
         <p class="chief">“Clause twenty-eight permits disappointment.”</p>
@@ -33,6 +33,7 @@
           <progress id="progress" max="2" value="0" aria-label="Coffee decisions completed"></progress>
           <noscript><p>The interactive episode needs JavaScript. You can still read the complete original CASE-021 below and return to the office using the navigation.</p></noscript>
           <div id="decision">
+            <div id="return-context" hidden><p class="eyebrow">Your first shift</p><p class="scene-copy" id="return-previous"></p></div>
             <h3 id="scene-heading" tabindex="-1">What stays on the coffee notice?</h3>
             <p class="scene-copy" id="scene-copy">The useful instruction is buried on page nineteen: leave enough for the next person. Chief insists the cover sheet is doing valuable work.</p>
             <div id="choices" class="options" aria-labelledby="scene-heading">
@@ -52,12 +53,14 @@
             <div class="receipt" aria-labelledby="ending-heading">
               <p class="eyebrow">Chief Roast Office / coffee receipt</p>
               <h3 id="ending-heading" tabindex="-1"></h3>
+              <div id="earlier-receipt" hidden><p class="eyebrow">From your first shift</p><p id="earlier-result"></p></div>
               <dl><dt>Rule left on the wall</dt><dd id="ending-rule"></dd><dt>What happened</dt><dd id="ending-result"></dd><dt>Next small action</dt><dd id="ending-next"></dd></dl>
               <p class="chief" id="ending-chief"></p><span class="stamp" id="ending-stamp"></span>
             </div>
-            <p class="fine">Two decisions filed. This receipt follows the route you chose; it is a fictional office outcome.</p>
+            <p class="fine" id="ending-note">Two decisions filed. This receipt follows the route you chose; it is a fictional office outcome.</p>
+            <div class="action-row"><button class="secondary" type="button" id="return-coffee">Try the next shift →</button></div>
             <div class="action-row"><button class="primary" type="button" id="replay">Try another coffee policy</button><a class="secondary" href="personnel-game.html">Return to personnel</a></div>
-            <p style="margin:18px 0 0"><a id="episode-feedback" href="index.html?feedback=coffee-20261015#game-feedback">Optional feedback for the development team →</a></p><p class="fine">Which choice changed the outcome? Tell us what was clear or confusing, if you wish. The feedback form is separate from the story.</p><p><a href="index.html?file=021#office-life">Read the original office file →</a></p>
+            <p style="margin:18px 0 0"><a id="episode-feedback" href="index.html?feedback=coffee-20261015-return#game-feedback">Optional feedback for the development team →</a></p><p class="fine">Which choice changed the outcome? Tell us what was clear or confusing, if you wish. The feedback form is separate from the story.</p><p><a href="index.html?file=021#office-life">Read the original office file →</a></p>
           </div>
           <p class="fine" style="border-top:1px solid var(--line);padding-top:16px;margin-top:24px">Scripted fiction. No sign-in. Your decisions stay on this page and reset when you reload.</p>
         </section>
@@ -92,13 +95,181 @@
       'none/assign':{title:'One duty returns.',rule:'If you take the last cup, make the next pot.',result:'You make the first refill and put the sentence by the kettle. The intern takes the next last cup and starts another pot. Chief keeps the wall free of appendices.',next:'Keep the visible responsibility. Add help only where someone actually gets stuck.',chief:'“A policy has returned. Mercifully, it arrived without luggage.”',stamp:'Useful rule retained'},
       'none/wait':{title:'The pot awaits a volunteer.',rule:'No instruction. Someone will handle it.',result:'Everyone leaves space for someone else to act. The pot stays empty. The fan completes another revolution without volunteering.',next:'Name the next action in one sentence. Then make the first pot.',chief:'“We have achieved unanimous confidence in an absent colleague.”',stamp:'Responsibility missing'}
     };
+    // The return begins from the actual first receipt, not an assumed success.
+    const returns = {
+  "plain/show": {
+    "scene": "The intern can now refill the machine. Two newcomers arrive during a busy break. Chief offers to become Director of Demonstrations.",
+    "choices": [
+      {
+        "id": "teach",
+        "label": "Let the intern teach the next newcomer.",
+        "note": "The first cup takes a little longer; another person learns the refill.",
+        "title": "The handover has a second author.",
+        "rule": "The last cup starts the next pot. Show a newcomer once.",
+        "result": "The intern repeats your demonstration. The newcomer makes the following pot while the intern returns to their desk. Chief is useful for carrying the cups.",
+        "next": "Keep the shared demonstration. Nobody needs to wait for one particular person.",
+        "chief": "“My department has expanded to include carrying things. Promotion is a mystery.”",
+        "stamp": "Knowledge shared"
+      },
+      {
+        "id": "chief",
+        "label": "Ask Chief to demonstrate every refill today.",
+        "note": "One consistent teacher helps this group; the queue depends on his availability.",
+        "title": "A reliable teacher. A single queue.",
+        "rule": "The last cup calls Chief for today’s demonstration.",
+        "result": "Chief shows both newcomers the machine carefully. Their coffee is made, but the next refill waits while he takes a call. Your earlier lesson works; the new routine depends on one person.",
+        "next": "Keep the demonstration and let someone else give the next one.",
+        "chief": "“I am delighted to be indispensable. The queue has offered a different assessment.”",
+        "stamp": "Capacity visible"
+      }
+    ]
+  },
+  "plain/point": {
+    "scene": "The notice is still readable and the pot is still cold. The newcomer asks for help again. This time Chief puts down the wording committee’s pencil.",
+    "choices": [
+      {
+        "id": "show",
+        "label": "Demonstrate the refill now.",
+        "note": "You stop your task briefly; the newcomer gets the missing first step.",
+        "title": "The sentence gets a demonstration.",
+        "rule": "The last cup starts the next pot; ask for a first demonstration.",
+        "result": "You show the controls and let the newcomer finish the refill. They can now do the next one. The same sentence becomes useful because someone supplied the missing step.",
+        "next": "Leave room to ask for help beside the instruction.",
+        "chief": "“The wording was clear. I have reluctantly extended this courtesy to the machine.”",
+        "stamp": "Repair accepted"
+      },
+      {
+        "id": "pair",
+        "label": "Pair the newcomer with an available colleague who knows the machine.",
+        "note": "Your task can continue; the refill waits briefly for the colleague to finish.",
+        "title": "Help has an actual name.",
+        "rule": "The last cup starts the next pot; ask an available colleague for a first demonstration.",
+        "result": "The colleague finishes their current task, then shows the newcomer how to refill. Coffee arrives later than with an immediate demonstration, but both jobs get done and the handover is no longer a guess.",
+        "next": "Check that the helper is available before sending the next person to them.",
+        "chief": "“Delegation has met its natural enemy: checking whether someone is free.”",
+        "stamp": "Named help available"
+      }
+    ]
+  },
+  "sign/replace": {
+    "scene": "The cup register is gone. The refill rule works until the person taking the last cup must leave for an urgent appointment. The intern asks whether an exception needs its own register.",
+    "choices": [
+      {
+        "id": "backup",
+        "label": "Ask an available colleague to take this refill.",
+        "note": "The urgent appointment stays on time; someone explicitly accepts the small task.",
+        "title": "An exception with a handover.",
+        "rule": "The last cup refills, or asks someone who agrees to take over.",
+        "result": "A colleague accepts the refill and the departing person leaves on time. The next pot is made without reviving the old register. The useful rule now has a usable exception.",
+        "next": "An exception needs an agreed handover, not a new appendix.",
+        "chief": "“One colleague said yes. The appeals committee has been sent home.”",
+        "stamp": "Exception handled"
+      },
+      {
+        "id": "batch",
+        "label": "Make the next pot together before the appointment.",
+        "note": "The appointment starts a little late; the handover is demonstrated immediately.",
+        "title": "Coffee made. Time spent.",
+        "rule": "The last cup starts the next pot; allow time for a first refill.",
+        "result": "You make the pot together. Everyone has coffee and the refill is understood, but the departing person is late. Retiring the register helped; this time the rule still cost more than the available minutes.",
+        "next": "Use a willing backup when a real deadline makes the usual task impractical.",
+        "chief": "“The coffee is punctual. We may need to widen our definition of success.”",
+        "stamp": "Cost recorded"
+      }
+    ]
+  },
+  "sign/audit": {
+    "scene": "The audit is complete and the pot is empty. The next break starts now. Chief can either authorize the actual refill or prepare a bound copy of the findings.",
+    "choices": [
+      {
+        "id": "release",
+        "label": "Let the intern refill while Chief files the audit.",
+        "note": "Coffee and records can both be finished; they no longer block each other.",
+        "title": "The record steps out of the doorway.",
+        "rule": "Refill the pot when it empties. File any useful record afterwards.",
+        "result": "The intern makes the coffee while Chief files his completed audit. The records remain available, but the cups no longer wait for them. Your first shift exposed exactly what needed separating.",
+        "next": "Keep only a record that serves a real purpose; keep it off the refill path.",
+        "chief": "“My paperwork remains intact. Its supervisory powers have been reduced.”",
+        "stamp": "Useful separation"
+      },
+      {
+        "id": "finish",
+        "label": "Finish filing the records, then refill.",
+        "note": "The records stay together; this break will start without coffee.",
+        "title": "An orderly file. A later break.",
+        "rule": "Complete the register and filing before the refill.",
+        "result": "Chief files every page and then makes the pot himself. The coffee does eventually arrive, after the break has started. The process is complete and its waiting cost is now visible.",
+        "next": "Decide whether the record is worth delaying the next person again.",
+        "chief": "“Everything is in its proper place. Including the people waiting outside it.”",
+        "stamp": "Delay acknowledged"
+      }
+    ]
+  },
+  "none/assign": {
+    "scene": "The refill rule has worked. The next person takes the last cup but cannot comfortably lift the full pot. Chief reaches for an exemption form, then pauses.",
+    "choices": [
+      {
+        "id": "split",
+        "label": "Split the refill into two manageable jobs.",
+        "note": "One person prepares the machine; a willing colleague lifts the pot.",
+        "title": "One responsibility. Two useful hands.",
+        "rule": "The last cup arranges the refill; share a step when help is needed.",
+        "result": "The person prepares the machine and a colleague handles the lifting. Coffee is made without excluding anyone or restoring the policy stack. The responsibility stayed clear while the method changed.",
+        "next": "Keep the result clear and let people arrange a workable way to do it.",
+        "chief": "“We adjusted the task instead of the person. I shall file this under obvious, eventually.”",
+        "stamp": "A workable arrangement"
+      },
+      {
+        "id": "round",
+        "label": "Have Chief make one pot at each scheduled break.",
+        "note": "Nobody has to lift it unexpectedly; coffee may run out between rounds.",
+        "title": "A predictable round.",
+        "rule": "Chief makes a fresh pot at each scheduled break.",
+        "result": "Chief fills the pot at the next break and the lifting problem is resolved. Between rounds, an early empty pot waits for him. You traded a shared immediate duty for a predictable service.",
+        "next": "Agree who can cover an unscheduled refill when someone needs one.",
+        "chief": "“I have acquired a timetable and a useful purpose. The timetable is taking it harder.”",
+        "stamp": "Tradeoff understood"
+      }
+    ]
+  },
+  "none/wait": {
+    "scene": "Everyone waited, so the next shift inherits an empty pot. The intern has five minutes before another task. Chief can ask for one small favor or agree how the next refill will happen.",
+    "choices": [
+      {
+        "id": "volunteer",
+        "label": "Ask for a volunteer to make this pot.",
+        "note": "Someone can help now; the next empty pot still needs a decision.",
+        "title": "A favor fixes today.",
+        "rule": "Ask someone available to make this pot.",
+        "result": "The intern volunteers and makes the coffee before returning to their task. This break works because a person agreed to help. The next shift still has no standing refill arrangement.",
+        "next": "Thank the volunteer, then decide whether a repeatable rule is actually needed.",
+        "chief": "“A volunteer has appeared. I shall resist promoting them to permanent infrastructure.”",
+        "stamp": "Today repaired"
+      },
+      {
+        "id": "rotate",
+        "label": "Agree who takes the next refill, then make this one.",
+        "note": "The office spends a minute agreeing; the following task has an owner.",
+        "title": "Someone has joined the next shift.",
+        "rule": "Agree the next refill owner before the pot empties.",
+        "result": "You make this pot while the intern agrees to the next one. The following refill happens without another round of waiting. The arrangement works because both people accepted it.",
+        "next": "Check the next person is still available when the shift changes.",
+        "chief": "“Our absent colleague has been replaced by two present ones. Recruitment is going well.”",
+        "stamp": "Next action agreed"
+      }
+    ]
+  }
+};
     let policy = null;
+    let route = null;
     let phase = 'policy';
     const preview = new URLSearchParams(window.location.search).get('chief_preview') === '1';
-    const feedbackBase = 'index.html?feedback=coffee-20261015' + (preview ? '&chief_preview=1' : '');
+    const feedbackBase = 'index.html?feedback=coffee-20261015-return' + (preview ? '&chief_preview=1' : '');
     $('episode-feedback').href = feedbackBase + '#game-feedback';
     function focus(id){$(id).focus();}
-    function status(done){$('progress').value=done;$('progress-text').textContent=done===2?'2 decisions filed':'Decision '+(done+1)+' of 2';}
+    function status(done){const total=phase==='return'||phase==='return-ending'?3:2;$('progress').max=total;$('progress').value=done;$('progress-text').textContent=done===total?done+' decisions filed':'Decision '+(done+1)+' of '+total;}
+    function showReceipt(ending){for(const [id,key] of [['ending-heading','title'],['ending-rule','rule'],['ending-result','result'],['ending-next','next'],['ending-chief','chief'],['ending-stamp','stamp']])$(id).textContent=ending[key];focus('ending-heading');}
+    function addChoice(action,label,note){const button=document.createElement('button');button.type='button';button.className='choice';button.dataset.action=action;const strong=document.createElement('strong');strong.textContent=label;const span=document.createElement('span');span.textContent=note;button.append(strong,span);$('choices').append(button);}
     $('choices').addEventListener('click', event => {
       const button=event.target.closest('button');
       if(!button || !$('choices').contains(button))return;
@@ -110,12 +281,20 @@
         $('feedback-chief').textContent=policies[policy].chief;
         focus('feedback-heading');
       }else if(phase==='test'){
-        const ending=endings[policy+'/'+button.dataset.action];
-        if(!ending)return;
-        $('episode-feedback').href=feedbackBase+'&route='+encodeURIComponent(policy+'/'+button.dataset.action)+'#game-feedback';
+        const candidateRoute=policy+'/'+button.dataset.action;
+        if(!Object.hasOwn(endings,candidateRoute))return;
+        route=candidateRoute;const ending=endings[route];
+        $('episode-feedback').href=feedbackBase+'&route='+encodeURIComponent(route)+'#game-feedback';
         phase='ending';status(2);$('decision').hidden=true;$('ending').hidden=false;
-        for(const [id,key] of [['ending-heading','title'],['ending-rule','rule'],['ending-result','result'],['ending-next','next'],['ending-chief','chief'],['ending-stamp','stamp']])$(id).textContent=ending[key];
-        focus('ending-heading');
+        showReceipt(ending);
+      }else if(phase==='return'){
+        const ending=returns[route].choices.find(choice=>choice.id===button.dataset.action);
+        if(!ending)return;
+        phase='return-ending';status(3);$('decision').hidden=true;$('return-context').hidden=true;$('ending').hidden=false;
+        $('earlier-result').textContent=endings[route].result;$('earlier-receipt').hidden=false;
+        $('return-coffee').hidden=true;$('ending-note').textContent='Three decisions filed. This fictional return follows your first shift and your latest choice.';
+        $('episode-feedback').href=feedbackBase+'&route='+encodeURIComponent(route+'/'+ending.id)+'#game-feedback';
+        showReceipt(ending);
       }
     });
     $('test-policy').addEventListener('click',()=>{
@@ -124,18 +303,25 @@
       $('scene-heading').textContent='The first empty-pot test.';$('scene-copy').textContent=policies[policy].scene;
       $('choices').replaceChildren();
       for(const [action,label,note] of policies[policy].choices){
-        const button=document.createElement('button');button.type='button';button.className='choice';button.dataset.action=action;
-        const strong=document.createElement('strong');strong.textContent=label;
-        const span=document.createElement('span');span.textContent=note;
-        button.append(strong,span);$('choices').append(button);
+        addChoice(action,label,note);
       }
+      focus('scene-heading');
+    });
+    $('return-coffee').addEventListener('click',()=>{
+      if(phase!=='ending'||!Object.hasOwn(returns,route))return;
+      phase='return';status(2);$('ending').hidden=true;$('decision').hidden=false;$('return-context').hidden=false;
+      $('return-previous').textContent=endings[route].result;
+      $('scene-heading').textContent='The next shift inherits your rule.';$('scene-heading').setAttribute('aria-describedby','return-previous');$('scene-copy').textContent=returns[route].scene;
+      $('choices').replaceChildren();for(const choice of returns[route].choices)addChoice(choice.id,choice.label,choice.note);
       focus('scene-heading');
     });
     $('replay').addEventListener('click',()=>{
       // Rebuild the initial controls without navigating or retaining a previous route.
       $('episode-feedback').href=feedbackBase+'#game-feedback';
-      policy=null;phase='policy';status(0);$('ending').hidden=true;$('feedback').hidden=true;$('decision').hidden=false;
-      $('scene-heading').textContent='What stays on the coffee notice?';
+      policy=null;route=null;phase='policy';status(0);$('ending').hidden=true;$('feedback').hidden=true;$('decision').hidden=false;
+      $('return-context').hidden=true;$('earlier-receipt').hidden=true;$('return-coffee').hidden=false;
+      $('ending-note').textContent='Two decisions filed. This receipt follows the route you chose; it is a fictional office outcome.';
+      $('scene-heading').textContent='What stays on the coffee notice?';$('scene-heading').removeAttribute('aria-describedby');
       $('scene-copy').textContent='The useful instruction is buried on page nineteen: leave enough for the next person. Chief insists the cover sheet is doing valuable work.';
       $('choices').replaceChildren();
       for(const [key,label,note] of [

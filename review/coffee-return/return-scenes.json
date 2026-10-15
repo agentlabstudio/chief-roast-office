@@ -1,0 +1,164 @@
+{
+  "plain/show": {
+    "scene": "The intern can now refill the machine. Two newcomers arrive during a busy break. Chief offers to become Director of Demonstrations.",
+    "choices": [
+      {
+        "id": "teach",
+        "label": "Let the intern teach the next newcomer.",
+        "note": "The first cup takes a little longer; another person learns the refill.",
+        "title": "The handover has a second author.",
+        "rule": "The last cup starts the next pot. Show a newcomer once.",
+        "result": "The intern repeats your demonstration. The newcomer makes the following pot while the intern returns to their desk. Chief is useful for carrying the cups.",
+        "next": "Keep the shared demonstration. Nobody needs to wait for one particular person.",
+        "chief": "“My department has expanded to include carrying things. Promotion is a mystery.”",
+        "stamp": "Knowledge shared"
+      },
+      {
+        "id": "chief",
+        "label": "Ask Chief to demonstrate every refill today.",
+        "note": "One consistent teacher helps this group; the queue depends on his availability.",
+        "title": "A reliable teacher. A single queue.",
+        "rule": "The last cup calls Chief for today’s demonstration.",
+        "result": "Chief shows both newcomers the machine carefully. Their coffee is made, but the next refill waits while he takes a call. Your earlier lesson works; the new routine depends on one person.",
+        "next": "Keep the demonstration and let someone else give the next one.",
+        "chief": "“I am delighted to be indispensable. The queue has offered a different assessment.”",
+        "stamp": "Capacity visible"
+      }
+    ]
+  },
+  "plain/point": {
+    "scene": "The notice is still readable and the pot is still cold. The newcomer asks for help again. This time Chief puts down the wording committee’s pencil.",
+    "choices": [
+      {
+        "id": "show",
+        "label": "Demonstrate the refill now.",
+        "note": "You stop your task briefly; the newcomer gets the missing first step.",
+        "title": "The sentence gets a demonstration.",
+        "rule": "The last cup starts the next pot; ask for a first demonstration.",
+        "result": "You show the controls and let the newcomer finish the refill. They can now do the next one. The same sentence becomes useful because someone supplied the missing step.",
+        "next": "Leave room to ask for help beside the instruction.",
+        "chief": "“The wording was clear. I have reluctantly extended this courtesy to the machine.”",
+        "stamp": "Repair accepted"
+      },
+      {
+        "id": "pair",
+        "label": "Pair the newcomer with an available colleague who knows the machine.",
+        "note": "Your task can continue; the refill waits briefly for the colleague to finish.",
+        "title": "Help has an actual name.",
+        "rule": "The last cup starts the next pot; ask an available colleague for a first demonstration.",
+        "result": "The colleague finishes their current task, then shows the newcomer how to refill. Coffee arrives later than with an immediate demonstration, but both jobs get done and the handover is no longer a guess.",
+        "next": "Check that the helper is available before sending the next person to them.",
+        "chief": "“Delegation has met its natural enemy: checking whether someone is free.”",
+        "stamp": "Named help available"
+      }
+    ]
+  },
+  "sign/replace": {
+    "scene": "The cup register is gone. The refill rule works until the person taking the last cup must leave for an urgent appointment. The intern asks whether an exception needs its own register.",
+    "choices": [
+      {
+        "id": "backup",
+        "label": "Ask an available colleague to take this refill.",
+        "note": "The urgent appointment stays on time; someone explicitly accepts the small task.",
+        "title": "An exception with a handover.",
+        "rule": "The last cup refills, or asks someone who agrees to take over.",
+        "result": "A colleague accepts the refill and the departing person leaves on time. The next pot is made without reviving the old register. The useful rule now has a usable exception.",
+        "next": "An exception needs an agreed handover, not a new appendix.",
+        "chief": "“One colleague said yes. The appeals committee has been sent home.”",
+        "stamp": "Exception handled"
+      },
+      {
+        "id": "batch",
+        "label": "Make the next pot together before the appointment.",
+        "note": "The appointment starts a little late; the handover is demonstrated immediately.",
+        "title": "Coffee made. Time spent.",
+        "rule": "The last cup starts the next pot; allow time for a first refill.",
+        "result": "You make the pot together. Everyone has coffee and the refill is understood, but the departing person is late. Retiring the register helped; this time the rule still cost more than the available minutes.",
+        "next": "Use a willing backup when a real deadline makes the usual task impractical.",
+        "chief": "“The coffee is punctual. We may need to widen our definition of success.”",
+        "stamp": "Cost recorded"
+      }
+    ]
+  },
+  "sign/audit": {
+    "scene": "The audit is complete and the pot is empty. The next break starts now. Chief can either authorize the actual refill or prepare a bound copy of the findings.",
+    "choices": [
+      {
+        "id": "release",
+        "label": "Let the intern refill while Chief files the audit.",
+        "note": "Coffee and records can both be finished; they no longer block each other.",
+        "title": "The record steps out of the doorway.",
+        "rule": "Refill the pot when it empties. File any useful record afterwards.",
+        "result": "The intern makes the coffee while Chief files his completed audit. The records remain available, but the cups no longer wait for them. Your first shift exposed exactly what needed separating.",
+        "next": "Keep only a record that serves a real purpose; keep it off the refill path.",
+        "chief": "“My paperwork remains intact. Its supervisory powers have been reduced.”",
+        "stamp": "Useful separation"
+      },
+      {
+        "id": "finish",
+        "label": "Finish filing the records, then refill.",
+        "note": "The records stay together; this break will start without coffee.",
+        "title": "An orderly file. A later break.",
+        "rule": "Complete the register and filing before the refill.",
+        "result": "Chief files every page and then makes the pot himself. The coffee does eventually arrive, after the break has started. The process is complete and its waiting cost is now visible.",
+        "next": "Decide whether the record is worth delaying the next person again.",
+        "chief": "“Everything is in its proper place. Including the people waiting outside it.”",
+        "stamp": "Delay acknowledged"
+      }
+    ]
+  },
+  "none/assign": {
+    "scene": "The refill rule has worked. The next person takes the last cup but cannot comfortably lift the full pot. Chief reaches for an exemption form, then pauses.",
+    "choices": [
+      {
+        "id": "split",
+        "label": "Split the refill into two manageable jobs.",
+        "note": "One person prepares the machine; a willing colleague lifts the pot.",
+        "title": "One responsibility. Two useful hands.",
+        "rule": "The last cup arranges the refill; share a step when help is needed.",
+        "result": "The person prepares the machine and a colleague handles the lifting. Coffee is made without excluding anyone or restoring the policy stack. The responsibility stayed clear while the method changed.",
+        "next": "Keep the result clear and let people arrange a workable way to do it.",
+        "chief": "“We adjusted the task instead of the person. I shall file this under obvious, eventually.”",
+        "stamp": "A workable arrangement"
+      },
+      {
+        "id": "round",
+        "label": "Have Chief make one pot at each scheduled break.",
+        "note": "Nobody has to lift it unexpectedly; coffee may run out between rounds.",
+        "title": "A predictable round.",
+        "rule": "Chief makes a fresh pot at each scheduled break.",
+        "result": "Chief fills the pot at the next break and the lifting problem is resolved. Between rounds, an early empty pot waits for him. You traded a shared immediate duty for a predictable service.",
+        "next": "Agree who can cover an unscheduled refill when someone needs one.",
+        "chief": "“I have acquired a timetable and a useful purpose. The timetable is taking it harder.”",
+        "stamp": "Tradeoff understood"
+      }
+    ]
+  },
+  "none/wait": {
+    "scene": "Everyone waited, so the next shift inherits an empty pot. The intern has five minutes before another task. Chief can ask for one small favor or agree how the next refill will happen.",
+    "choices": [
+      {
+        "id": "volunteer",
+        "label": "Ask for a volunteer to make this pot.",
+        "note": "Someone can help now; the next empty pot still needs a decision.",
+        "title": "A favor fixes today.",
+        "rule": "Ask someone available to make this pot.",
+        "result": "The intern volunteers and makes the coffee before returning to their task. This break works because a person agreed to help. The next shift still has no standing refill arrangement.",
+        "next": "Thank the volunteer, then decide whether a repeatable rule is actually needed.",
+        "chief": "“A volunteer has appeared. I shall resist promoting them to permanent infrastructure.”",
+        "stamp": "Today repaired"
+      },
+      {
+        "id": "rotate",
+        "label": "Agree who takes the next refill, then make this one.",
+        "note": "The office spends a minute agreeing; the following task has an owner.",
+        "title": "Someone has joined the next shift.",
+        "rule": "Agree the next refill owner before the pot empties.",
+        "result": "You make this pot while the intern agrees to the next one. The following refill happens without another round of waiting. The arrangement works because both people accepted it.",
+        "next": "Check the next person is still available when the shift changes.",
+        "chief": "“Our absent colleague has been replaced by two present ones. Recruitment is going well.”",
+        "stamp": "Next action agreed"
+      }
+    ]
+  }
+}
