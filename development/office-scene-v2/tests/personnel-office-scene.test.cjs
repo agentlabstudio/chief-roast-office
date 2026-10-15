@@ -8,7 +8,7 @@ const {JSDOM} = require('jsdom');
 const base = path.resolve(__dirname, '..');
 const source = fs.readFileSync(path.join(base, 'assets/personnel-office-scene.js'), 'utf8');
 const css = fs.readFileSync(path.join(base, 'assets/personnel-office-scene.css'), 'utf8');
-// The fixture is the unmodified real game at fd15991902d11c3480f7cf544f431eb9ff82d634.
+// The fixture mirrors the real top-level game and its current external asset references.
 const fixture = fs.readFileSync(path.join(__dirname, 'fixtures/personnel-game.html'), 'utf8');
 
 function game(options = {}) {
