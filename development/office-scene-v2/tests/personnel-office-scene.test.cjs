@@ -47,12 +47,14 @@ test('original game opening → real choice → Chief feedback → completed rev
     assert.match(status(g), /The opening shift.*Ready to clock in.*0 \/ 6 decisions filed/);
     assert.deepEqual(active(g), []);
     assert.equal(scene(g).nextElementSibling, g.document.querySelector('.grid'));
+    assert.equal(scene(g).querySelector('.chief-stage__link').getAttribute('href'), '#review-form');
     assert.equal(scene(g).querySelector('img').getAttribute('src'), 'assets/chief-office-room-20261014.png');
     click(g, 'start');
     assert.equal(scene(g).dataset.stage, 'decision');
     assert.deepEqual(active(g), ['printer']);
     choose(g);
     assert.equal(scene(g).dataset.stage, 'feedback');
+    assert.equal(scene(g).querySelector('.chief-stage__link').getAttribute('href'), '#review-form');
     assert.match(status(g), /Decision filed.*1 \/ 6 decisions filed/);
     assert.equal(scene(g).querySelector('.chief-stage__reply').textContent, g.document.getElementById('chief-feedback').textContent);
     assert.deepEqual(active(g), ['printer']);
@@ -61,17 +63,20 @@ test('original game opening → real choice → Chief feedback → completed rev
     assert.equal(scene(g).querySelector('.chief-stage__reply').hidden, true);
     for (let i=1;i<6;i++) {choose(g);click(g,'next');}
     assert.equal(scene(g).dataset.stage, 'complete');
+    assert.equal(scene(g).querySelector('.chief-stage__link').getAttribute('href'), '#paper');
     assert.match(status(g), /Shift closed.*6 \/ 6 decisions filed/);
     assert.deepEqual(active(g), []);
     assert.match(scene(g).querySelector('.chief-stage__stamp').textContent, /Review stamp · /);
     click(g, 'return-near-card');
     assert.equal(scene(g).dataset.shift, 'return');
     assert.equal(scene(g).dataset.stage, 'decision');
+    assert.equal(scene(g).querySelector('.chief-stage__link').getAttribute('href'), '#review-form');
     assert.match(status(g), /The return shift.*0 \/ 5 decisions filed/);
     assert.deepEqual(active(g), ['desk']);
     assert.equal(scene(g).querySelector('.chief-stage__stamp').hidden, true);
     for (let i=0;i<5;i++) {choose(g);click(g,'next');}
     assert.match(status(g), /Shift closed.*5 \/ 5 decisions filed/);
+    assert.equal(scene(g).querySelector('.chief-stage__link').getAttribute('href'), '#paper');
   } finally {await g.close();}
 });
 

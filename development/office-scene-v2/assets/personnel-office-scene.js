@@ -147,6 +147,7 @@
         textIfChanged(chip, names[key] + (active ? ' · current' : ''));
         attributeIfChanged(chip, 'aria-label', names[key] + (active ? ' — current decision' : ''));
       }
+      attributeIfChanged(shiftLink, 'href', state.stage === 'complete' ? '#paper' : '#review-form');
       textIfChanged(shiftLink, state.stage === 'complete' ? 'Go to your review ↓' : state.stage === 'feedback' ? 'Continue the shift ↓' : 'Go to the shift ↓');
     }
     update();
