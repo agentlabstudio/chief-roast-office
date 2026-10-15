@@ -54,10 +54,10 @@
       returnLabel: 'Return to your personnel shift',
       returnHref: 'personnel-game.html'
     };
-    if (key !== 'coffee-20261015' && key !== 'coffee-20261015-return') return null;
+    if (!['coffee-20261015', 'coffee-20261015-return', 'coffee-20261015-review'].includes(key)) return null;
     const route = query.get('route');
     const knownRoutes = ['plain/show', 'plain/point', 'sign/replace', 'sign/audit', 'none/assign', 'none/wait'];
-    if (key === 'coffee-20261015-return') knownRoutes.push('plain/show/teach', 'plain/show/chief', 'plain/point/show', 'plain/point/pair', 'sign/replace/backup', 'sign/replace/batch', 'sign/audit/release', 'sign/audit/finish', 'none/assign/split', 'none/assign/round', 'none/wait/volunteer', 'none/wait/rotate');
+    if (key === 'coffee-20261015-return' || key === 'coffee-20261015-review') knownRoutes.push('plain/show/teach', 'plain/show/chief', 'plain/point/show', 'plain/point/pair', 'sign/replace/backup', 'sign/replace/batch', 'sign/audit/release', 'sign/audit/finish', 'none/assign/split', 'none/assign/round', 'none/wait/volunteer', 'none/wait/rotate');
     return {
       label: 'Coffee CASE-021 · ' + key + (knownRoutes.includes(route) ? ' · route ' + route : ''),
       returnLabel: 'Try another coffee policy',

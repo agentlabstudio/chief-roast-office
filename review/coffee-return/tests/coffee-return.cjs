@@ -17,7 +17,7 @@ class Element {
 }
 function boot(file,{saved=null,blocked=false,search='',sourceFile=null}={}){
   const html=fs.readFileSync(sourceFile || (fs.existsSync(path.join(root,'candidate',file)) ? path.join(root,'candidate',file) : path.resolve(root,'../..',file)),'utf8'),script=html.match(/<script>([\s\S]*?)<\/script>/)[1];
-  const ids=new Map([...html.matchAll(/<([\w-]+)[^>]*\bid="([^"]+)"[^>]*>/g)].map(m=>{const el=new Element(m[1],m[2]);el.hidden=/\bhidden\b/.test(m[0]);return[m[2],el];}));
+  const ids=new Map([...html.matchAll(/<([\w-]+)[^>]*\bid="([^"]+)"[^>]*>/g)].map(m=>{const el=new Element(m[1],m[2]);el.hidden=/\bhidden\b/.test(m[0]);el.className=m[0].match(/\bclass="([^"]*)"/)?.[1]||'';return[m[2],el];}));
   const data=new Map();if(saved)data.set('chief-office-shifts-v2',saved);
   const fills=[];let cy=0;const canvasContext={font:'',measureText(text){const n=Number(this.font.match(/(\d+)px/)?.[1]||16);return{width:String(text).length*n*.6};},fillRect(){},strokeRect(){},beginPath(){},moveTo(){},lineTo(){},stroke(){},save(){},restore(){cy=0;},translate(x,y){cy=y;},rotate(){},fillText(text,x,y){fills.push({text,x,y:y+cy});}};
   const doc={getElementById:id=>{assert.ok(ids.has(id),'id '+id);return ids.get(id);},body:new Element('body'),createElement:tag=>{const e=new Element(tag);if(tag==='canvas'){e.getContext=()=>canvasContext;e.toBlob=cb=>cb({size:1});}return e;},dispatchEvent(){},addEventListener(){}};
@@ -32,6 +32,14 @@ const routeActions={
   'sign/replace':['backup','batch'], 'sign/audit':['release','finish'],
   'none/assign':['split','round'], 'none/wait':['volunteer','rotate']
 };
+const expectedInvitations={
+  'plain/show':'Next shift: teach now or protect a deadline →',
+  'plain/point':'Next shift: the newcomer still needs help →',
+  'sign/replace':'Next shift: the refill meets a real deadline →',
+  'sign/audit':'Next shift: the audit is done. The pot is empty →',
+  'none/assign':'Next shift: the pot is too heavy →',
+  'none/wait':'Next shift: who will end the waiting? →'
+};
 async function firstReceipt(page,route){const [policy,action]=route.split('/');await page.$('choices').children.find(b=>b.dataset.policy===policy).click();await page.$('test-policy').click();await page.$('choices').children.find(b=>b.dataset.action===action).click();}
 function receipt(page){return ['ending-heading','ending-rule','ending-result','ending-next','ending-chief','ending-stamp'].map(id=>page.$(id).textContent);}
 (async()=>{
@@ -45,6 +53,11 @@ function receipt(page){return ['ending-heading','ending-rule','ending-result','e
       assert.deepEqual(receipt(p),receipt(old),'unchanged first receipt '+route);
       assert.equal(p.$('progress').value,2);assert.equal(p.$('progress').max,2);
       assert.equal(p.$('earlier-receipt').hidden,true);assert.equal(p.$('return-coffee').hidden,false);
+      assert.equal(p.$('return-coffee').textContent,expectedInvitations[route]);
+      assert.equal(p.$('return-coffee').className,'primary');assert.equal(p.$('replay').className,'secondary');
+      assert.ok(p.$('return-coffee').listeners.click.length);assert.ok(p.$('replay').listeners.click.length);
+      const initialFeedback=new URL(p.$('episode-feedback').href,'https://example.invalid/');
+      assert.equal(initialFeedback.searchParams.get('feedback'),'coffee-20261015-review');assert.equal(initialFeedback.searchParams.get('route'),route);
       const earlier=p.$('ending-result').textContent;
       await p.$('return-coffee').click();assert.equal(p.$('ending').hidden,true);assert.equal(p.$('decision').hidden,false);
       assert.equal(p.$('return-context').hidden,false);assert.equal(p.$('return-previous').textContent,earlier);
@@ -60,13 +73,19 @@ function receipt(page){return ['ending-heading','ending-rule','ending-result','e
       assert.equal(p.$('ending').hidden,false);assert.equal(p.$('ending-heading').focused,true);
       for(const text of receipt(p)){assert.ok(text.length>8);assert.ok(!/undefined|\[object Object\]/.test(text));}
       const url=new URL(p.$('episode-feedback').href,'https://example.invalid/');
-      assert.equal(url.searchParams.get('feedback'),'coffee-20261015-return');assert.equal(url.searchParams.get('route'),route+'/'+action);assert.equal(url.searchParams.get('chief_preview'),'1');
+      assert.equal(url.searchParams.get('feedback'),'coffee-20261015-review');assert.equal(url.searchParams.get('route'),route+'/'+action);assert.equal(url.searchParams.get('chief_preview'),'1');
       const final=receipt(p);await p.$('return-coffee').click();await target.click();assert.deepEqual(receipt(p),final,'duplicate/stale completion cannot advance');
       distinct.add(p.$('ending-heading').textContent);records.push({route:route+'/'+action,title:p.$('ending-heading').textContent});
       await p.$('replay').click();assert.equal(p.$('progress').value,0);assert.equal(p.$('progress').max,2);
       assert.equal(p.$('ending').hidden,true);assert.equal(p.$('return-context').hidden,true);assert.equal(p.$('earlier-receipt').hidden,true);assert.equal(p.$('return-coffee').hidden,false);
       assert.equal(p.$('choices').children.length,3);assert.ok(!p.$('episode-feedback').href.includes('route='));assert.equal(p.data.size,0);
+      assert.equal(p.$('return-coffee').textContent,'Take the next shift →');assert.equal(p.$('return-coffee').className,'primary');assert.equal(p.$('replay').className,'secondary');
+      assert.equal(new URL(p.$('episode-feedback').href,'https://example.invalid/').searchParams.get('feedback'),'coffee-20261015-review');
       assert.equal(p.$('scene-heading').getAttribute('aria-describedby'),null);
+      const routes=Object.keys(routeActions),nextRoute=routes[(routes.indexOf(route)+1)%routes.length];
+      await firstReceipt(p,nextRoute);assert.equal(p.$('return-coffee').textContent,expectedInvitations[nextRoute]);
+      assert.equal(p.$('earlier-receipt').hidden,true);assert.equal(p.$('return-coffee').hidden,false);
+      assert.equal(new URL(p.$('episode-feedback').href,'https://example.invalid/').searchParams.get('route'),nextRoute);
       assert.ok(!/fetch\(|localStorage|sessionStorage|<script[^>]+src=/.test(p.html));
     }
   }
@@ -76,12 +95,18 @@ function receipt(page){return ['ending-heading','ending-rule','ending-result','e
   const parse=vm.runInNewContext(signals.slice(start,end)+'\nfeedbackContext',{URLSearchParams});
   let contexts=0;
   for(const [route,actions] of Object.entries(routeActions)){
-    for(const key of ['coffee-20261015','coffee-20261015-return']){const c=parse(new URLSearchParams({feedback:key,route}));assert.ok(c.label.endsWith('route '+route));contexts++;}
-    for(const action of actions){const full=route+'/'+action;const c=parse(new URLSearchParams({feedback:'coffee-20261015-return',route:full}));assert.ok(c.label.endsWith('route '+full));assert.ok(c.label.length<150);contexts++;
+    for(const key of ['coffee-20261015','coffee-20261015-return','coffee-20261015-review']){const c=parse(new URLSearchParams({feedback:key,route}));assert.ok(c.label.endsWith('route '+route));contexts++;}
+    for(const action of actions){const full=route+'/'+action;for(const key of ['coffee-20261015-return','coffee-20261015-review']){const c=parse(new URLSearchParams({feedback:key,route:full}));assert.ok(c.label.endsWith('route '+full));assert.ok(c.label.length<150);contexts++;}
       const legacy=parse(new URLSearchParams({feedback:'coffee-20261015',route:full}));assert.equal(legacy.label,'Coffee CASE-021 · coffee-20261015');}
   }
-  for(const route of ['<script>alert(1)</script>','plain/show/rotate','constructor','none/wait/rotate/extra']){const c=parse(new URLSearchParams({feedback:'coffee-20261015-return',route}));assert.equal(c.label,'Coffee CASE-021 · coffee-20261015-return');invalid++;}
-  assert.equal(parse(new URLSearchParams({feedback:'coffee-20261015-return-evil',route:'plain/show/teach'})),null);
-  const report={pass:true,original_receipts_unchanged:6,optional_return_routes:records,invalid_actions_or_contexts_rejected:invalid,allowed_feedback_contexts:contexts,replay_resets:12,network_requests_sent:0,storage_changes:0,method:'Actual inline UI and feedback parser in minimal simulated DOM; no browser/layout/physical-device claims.'};
+  for(const key of ['coffee-20261015-return','coffee-20261015-review'])for(const route of ['<script>alert(1)</script>','plain/show/rotate','constructor','none/wait/rotate/extra']){const c=parse(new URLSearchParams({feedback:key,route}));assert.equal(c.label,'Coffee CASE-021 · '+key);invalid++;}
+  for(const key of ['coffee-20261015-return-evil','coffee-20261015-review-evil','coffee-20261015-review/extra'])assert.equal(parse(new URLSearchParams({feedback:key,route:'plain/show/teach'})),null);
+  const legacySignals=fs.readFileSync(path.resolve(root,'../../game-next/candidate/assets/office-signals.js'),'utf8');
+  const legacyParse=vm.runInNewContext(legacySignals.slice(legacySignals.indexOf('  function feedbackContext('),legacySignals.indexOf('  function init()'))+'\nfeedbackContext',{URLSearchParams});
+  let legacyContexts=0;
+  for(const [route,actions]of Object.entries(routeActions))for(const key of ['coffee-20261015','coffee-20261015-return'])for(const selectedRoute of [route,...(key==='coffee-20261015-return'?actions.map(action=>route+'/'+action):[])]){
+    const query=new URLSearchParams({feedback:key,route:selectedRoute});assert.equal(JSON.stringify(parse(query)),JSON.stringify(legacyParse(query)));legacyContexts++;
+  }
+  const report={pass:true,original_receipts_unchanged:6,optional_return_routes:records,contextual_primary_ctas:6,replay_secondary_and_available:true,invalid_actions_or_contexts_rejected:invalid,allowed_feedback_contexts:contexts,legacy_contexts_unchanged:legacyContexts,replay_resets:12,cross_route_replay_cta_resets:12,network_requests_sent:0,storage_changes:0,method:'Actual inline UI and feedback parser in minimal simulated DOM; no browser/layout/physical-device claims.'};
   fs.writeFileSync(path.join(__dirname,'coffee-return-results.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify({...report,optional_return_routes:records.length}));
 })().catch(e=>{console.error(e.stack);process.exitCode=1;});

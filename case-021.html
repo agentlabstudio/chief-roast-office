@@ -57,10 +57,10 @@
               <dl><dt>Rule left on the wall</dt><dd id="ending-rule"></dd><dt>What happened</dt><dd id="ending-result"></dd><dt>Next small action</dt><dd id="ending-next"></dd></dl>
               <p class="chief" id="ending-chief"></p><span class="stamp" id="ending-stamp"></span>
             </div>
-            <p class="fine" id="ending-note">Two decisions filed. This receipt follows the route you chose; it is a fictional office outcome.</p>
-            <div class="action-row"><button class="secondary" type="button" id="return-coffee">Try the next shift →</button></div>
-            <div class="action-row"><button class="primary" type="button" id="replay">Try another coffee policy</button><a class="secondary" href="personnel-game.html">Return to personnel</a></div>
-            <p style="margin:18px 0 0"><a id="episode-feedback" href="index.html?feedback=coffee-20261015-return#game-feedback">Optional feedback for the development team →</a></p><p class="fine">Which choice changed the outcome? Tell us what was clear or confusing, if you wish. The feedback form is separate from the story.</p><p><a href="index.html?file=021#office-life">Read the original office file →</a></p>
+            <p class="fine" id="ending-note">Two decisions filed. This receipt follows the route you chose; it is a fictional office outcome. The next shift is one more decision, available now.</p>
+            <div class="action-row"><button class="primary" type="button" id="return-coffee">Take the next shift →</button></div>
+            <div class="action-row"><button class="secondary" type="button" id="replay">Try another coffee policy</button><a class="secondary" href="personnel-game.html">Return to personnel</a></div>
+            <p style="margin:18px 0 0"><a id="episode-feedback" href="index.html?feedback=coffee-20261015-review#game-feedback">Optional feedback for the development team →</a></p><p class="fine">Which choice changed the outcome? Tell us what was clear or confusing, if you wish. The feedback form is separate from the story.</p><p><a href="index.html?file=021#office-life">Read the original office file →</a></p>
           </div>
           <p class="fine" style="border-top:1px solid var(--line);padding-top:16px;margin-top:24px">Scripted fiction. No sign-in. Your decisions stay on this page and reset when you reload.</p>
         </section>
@@ -98,29 +98,29 @@
     // The return begins from the actual first receipt, not an assumed success.
     const returns = {
   "plain/show": {
-    "scene": "The intern can now refill the machine. Two newcomers arrive during a busy break. Chief offers to become Director of Demonstrations.",
+    "scene": "The intern can now refill the machine. Two newcomers arrive during a busy break, just as the intern must finish a task due before the break ends. There is time for a first demonstration or that task. Chief has a full spare flask and offers to cover this break. He calls this a department.",
     "choices": [
       {
         "id": "teach",
-        "label": "Let the intern teach the next newcomer.",
-        "note": "The first cup takes a little longer; another person learns the refill.",
-        "title": "The handover has a second author.",
+        "label": "Use this break for the intern to teach a newcomer.",
+        "note": "Another person learns the refill; the intern’s other task misses its deadline.",
+        "title": "Two teachers. One late task.",
         "rule": "The last cup starts the next pot. Show a newcomer once.",
-        "result": "The intern repeats your demonstration. The newcomer makes the following pot while the intern returns to their desk. Chief is useful for carrying the cups.",
-        "next": "Keep the shared demonstration. Nobody needs to wait for one particular person.",
-        "chief": "“My department has expanded to include carrying things. Promotion is a mystery.”",
-        "stamp": "Knowledge shared"
+        "result": "The intern repeats your demonstration. The newcomer makes the following pot without help. The intern’s other task is late: you gained another trained colleague by spending time that already had a job.",
+        "next": "Keep the shared skill. Tell the task’s next operator why it will arrive late.",
+        "chief": "“Knowledge has a second author. The overdue task has requested one too.”",
+        "stamp": "Shared skill; time spent"
       },
       {
         "id": "chief",
-        "label": "Ask Chief to demonstrate every refill today.",
-        "note": "One consistent teacher helps this group; the queue depends on his availability.",
-        "title": "A reliable teacher. A single queue.",
-        "rule": "The last cup calls Chief for today’s demonstration.",
-        "result": "Chief shows both newcomers the machine carefully. Their coffee is made, but the next refill waits while he takes a call. Your earlier lesson works; the new routine depends on one person.",
-        "next": "Keep the demonstration and let someone else give the next one.",
-        "chief": "“I am delighted to be indispensable. The queue has offered a different assessment.”",
-        "stamp": "Capacity visible"
+        "label": "Use Chief’s spare flask. Keep the intern on their task.",
+        "note": "Coffee and the deadline stay on time; the newcomers still need a demonstration.",
+        "title": "One deadline kept. One lesson waiting.",
+        "rule": "Use the spare flask for this break; the newcomers’ lesson is still due.",
+        "result": "Chief serves his spare flask while the intern finishes their task on time. The newcomers get their coffee but still cannot refill alone. The next shift inherits a teaching job, rather than a late task.",
+        "next": "Name a time and an available teacher before another refill needs cover.",
+        "chief": "“The emergency flask has saved a deadline. I shall resist giving it a salary.”",
+        "stamp": "Deadline kept; lesson due"
       }
     ]
   },
@@ -260,11 +260,19 @@
     ]
   }
 };
+    const nextShiftInvitations = {
+      'plain/show':'Next shift: teach now or protect a deadline →',
+      'plain/point':'Next shift: the newcomer still needs help →',
+      'sign/replace':'Next shift: the refill meets a real deadline →',
+      'sign/audit':'Next shift: the audit is done. The pot is empty →',
+      'none/assign':'Next shift: the pot is too heavy →',
+      'none/wait':'Next shift: who will end the waiting? →'
+    };
     let policy = null;
     let route = null;
     let phase = 'policy';
     const preview = new URLSearchParams(window.location.search).get('chief_preview') === '1';
-    const feedbackBase = 'index.html?feedback=coffee-20261015-return' + (preview ? '&chief_preview=1' : '');
+    const feedbackBase = 'index.html?feedback=coffee-20261015-review' + (preview ? '&chief_preview=1' : '');
     $('episode-feedback').href = feedbackBase + '#game-feedback';
     function focus(id){$(id).focus();}
     function status(done){const total=phase==='return'||phase==='return-ending'?3:2;$('progress').max=total;$('progress').value=done;$('progress-text').textContent=done===total?done+' decisions filed':'Decision '+(done+1)+' of '+total;}
@@ -284,6 +292,7 @@
         const candidateRoute=policy+'/'+button.dataset.action;
         if(!Object.hasOwn(endings,candidateRoute))return;
         route=candidateRoute;const ending=endings[route];
+        $('return-coffee').textContent=nextShiftInvitations[route];
         $('episode-feedback').href=feedbackBase+'&route='+encodeURIComponent(route)+'#game-feedback';
         phase='ending';status(2);$('decision').hidden=true;$('ending').hidden=false;
         showReceipt(ending);
@@ -320,7 +329,8 @@
       $('episode-feedback').href=feedbackBase+'#game-feedback';
       policy=null;route=null;phase='policy';status(0);$('ending').hidden=true;$('feedback').hidden=true;$('decision').hidden=false;
       $('return-context').hidden=true;$('earlier-receipt').hidden=true;$('return-coffee').hidden=false;
-      $('ending-note').textContent='Two decisions filed. This receipt follows the route you chose; it is a fictional office outcome.';
+      $('return-coffee').textContent='Take the next shift →';
+      $('ending-note').textContent='Two decisions filed. This receipt follows the route you chose; it is a fictional office outcome. The next shift is one more decision, available now.';
       $('scene-heading').textContent='What stays on the coffee notice?';$('scene-heading').removeAttribute('aria-describedby');
       $('scene-copy').textContent='The useful instruction is buried on page nineteen: leave enough for the next person. Chief insists the cover sheet is doing valuable work.';
       $('choices').replaceChildren();

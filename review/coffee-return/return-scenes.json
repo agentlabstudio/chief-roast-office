@@ -1,28 +1,28 @@
 {
   "plain/show": {
-    "scene": "The intern can now refill the machine. Two newcomers arrive during a busy break. Chief offers to become Director of Demonstrations.",
+    "scene": "The intern can now refill the machine. Two newcomers arrive during a busy break, just as the intern must finish a task due before the break ends. There is time for a first demonstration or that task. Chief has a full spare flask and offers to cover this break. He calls this a department.",
     "choices": [
       {
         "id": "teach",
-        "label": "Let the intern teach the next newcomer.",
-        "note": "The first cup takes a little longer; another person learns the refill.",
-        "title": "The handover has a second author.",
+        "label": "Use this break for the intern to teach a newcomer.",
+        "note": "Another person learns the refill; the intern’s other task misses its deadline.",
+        "title": "Two teachers. One late task.",
         "rule": "The last cup starts the next pot. Show a newcomer once.",
-        "result": "The intern repeats your demonstration. The newcomer makes the following pot while the intern returns to their desk. Chief is useful for carrying the cups.",
-        "next": "Keep the shared demonstration. Nobody needs to wait for one particular person.",
-        "chief": "“My department has expanded to include carrying things. Promotion is a mystery.”",
-        "stamp": "Knowledge shared"
+        "result": "The intern repeats your demonstration. The newcomer makes the following pot without help. The intern’s other task is late: you gained another trained colleague by spending time that already had a job.",
+        "next": "Keep the shared skill. Tell the task’s next operator why it will arrive late.",
+        "chief": "“Knowledge has a second author. The overdue task has requested one too.”",
+        "stamp": "Shared skill; time spent"
       },
       {
         "id": "chief",
-        "label": "Ask Chief to demonstrate every refill today.",
-        "note": "One consistent teacher helps this group; the queue depends on his availability.",
-        "title": "A reliable teacher. A single queue.",
-        "rule": "The last cup calls Chief for today’s demonstration.",
-        "result": "Chief shows both newcomers the machine carefully. Their coffee is made, but the next refill waits while he takes a call. Your earlier lesson works; the new routine depends on one person.",
-        "next": "Keep the demonstration and let someone else give the next one.",
-        "chief": "“I am delighted to be indispensable. The queue has offered a different assessment.”",
-        "stamp": "Capacity visible"
+        "label": "Use Chief’s spare flask. Keep the intern on their task.",
+        "note": "Coffee and the deadline stay on time; the newcomers still need a demonstration.",
+        "title": "One deadline kept. One lesson waiting.",
+        "rule": "Use the spare flask for this break; the newcomers’ lesson is still due.",
+        "result": "Chief serves his spare flask while the intern finishes their task on time. The newcomers get their coffee but still cannot refill alone. The next shift inherits a teaching job, rather than a late task.",
+        "next": "Name a time and an available teacher before another refill needs cover.",
+        "chief": "“The emergency flask has saved a deadline. I shall resist giving it a salary.”",
+        "stamp": "Deadline kept; lesson due"
       }
     ]
   },
