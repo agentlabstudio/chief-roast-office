@@ -101,7 +101,10 @@ function receipt(page){return ['ending-heading','ending-rule','ending-result','e
   }
   for(const key of ['coffee-20261015-return','coffee-20261015-review'])for(const route of ['<script>alert(1)</script>','plain/show/rotate','constructor','none/wait/rotate/extra']){const c=parse(new URLSearchParams({feedback:key,route}));assert.equal(c.label,'Coffee CASE-021 · '+key);invalid++;}
   for(const key of ['coffee-20261015-return-evil','coffee-20261015-review-evil','coffee-20261015-review/extra'])assert.equal(parse(new URLSearchParams({feedback:key,route:'plain/show/teach'})),null);
-  const legacySignals=fs.readFileSync(path.resolve(root,'../../game-next/candidate/assets/office-signals.js'),'utf8');
+  // Frozen pre-review parser from f95b215d66d5b6af0076cda7cc742bf96ff76c5d.
+  // Keep this test portable:
+  // the original author's untracked game-next checkout is not part of the repo.
+  const legacySignals=fs.readFileSync(path.join(__dirname,'fixtures/office-signals-before-review.js'),'utf8');
   const legacyParse=vm.runInNewContext(legacySignals.slice(legacySignals.indexOf('  function feedbackContext('),legacySignals.indexOf('  function init()'))+'\nfeedbackContext',{URLSearchParams});
   let legacyContexts=0;
   for(const [route,actions]of Object.entries(routeActions))for(const key of ['coffee-20261015','coffee-20261015-return'])for(const selectedRoute of [route,...(key==='coffee-20261015-return'?actions.map(action=>route+'/'+action):[])]){
@@ -110,3 +113,4 @@ function receipt(page){return ['ending-heading','ending-rule','ending-result','e
   const report={pass:true,original_receipts_unchanged:6,optional_return_routes:records,contextual_primary_ctas:6,replay_secondary_and_available:true,invalid_actions_or_contexts_rejected:invalid,allowed_feedback_contexts:contexts,legacy_contexts_unchanged:legacyContexts,replay_resets:12,cross_route_replay_cta_resets:12,network_requests_sent:0,storage_changes:0,method:'Actual inline UI and feedback parser in minimal simulated DOM; no browser/layout/physical-device claims.'};
   fs.writeFileSync(path.join(__dirname,'coffee-return-results.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify({...report,optional_return_routes:records.length}));
 })().catch(e=>{console.error(e.stack);process.exitCode=1;});
+
