@@ -56,7 +56,7 @@
           <details id="archive" class="archive"><summary>Previous reviews in this browser</summary><div id="archive-list"></div></details>
         </div>
         <div class="local-tools"><p id="local-status" class="privacy">Your shift is saved only in this browser.</p><button id="clear-file" class="secondary" type="button">Clear local file</button></div>
-        <div id="clear-confirm" class="clear-confirm" hidden><p>Clear this browser’s current shift and completed reviews? Nothing is sent to the office.</p><button id="confirm-clear" class="secondary" type="button">Clear my local file</button><button id="cancel-clear" class="secondary" type="button">Keep it</button></div>
+        <div id="clear-confirm" class="clear-confirm" hidden><p>Clear this browser’s personnel shifts, repair desk and coffee choices? Nothing is sent to the office.</p><button id="confirm-clear" class="secondary" type="button">Clear my local file</button><button id="cancel-clear" class="secondary" type="button">Keep it</button></div>
       </section>
       <section class="preview" aria-labelledby="card-heading">
         <div id="paper" class="paper">
@@ -276,7 +276,7 @@
   $('replay').addEventListener('click',()=>{status('A new opening shift. Your earlier reviews stay in the local file.');commit(beginShift(state,0));});
   $('clear-file').addEventListener('click',()=>{clearPending=true;$('clear-confirm').hidden=false;$('confirm-clear').focus();});
   $('cancel-clear').addEventListener('click',()=>{clearPending=false;$('clear-confirm').hidden=true;$('clear-file').focus();});
-  $('confirm-clear').addEventListener('click',()=>{if(!clearPending)return;let cleared=false;try{localStorage.removeItem(STORAGE_KEY);cleared=localStorage.getItem(STORAGE_KEY)===null;}catch(_){}const detail={storageCleared:cleared,repairCleared:true};document.dispatchEvent(new CustomEvent('chief:local-clear',{detail}));clearPending=false;state=newState();$('clear-confirm').hidden=true;render(true);status(cleared&&detail.repairCleared?'This browser’s office file was cleared. A new shift is ready.':'The shift was reset on this page, but saved data could not be fully cleared. It may return after reload. Use your browser’s site-data controls to remove it.');});
+  $('confirm-clear').addEventListener('click',()=>{if(!clearPending)return;let cleared=false;try{localStorage.removeItem(STORAGE_KEY);cleared=localStorage.getItem(STORAGE_KEY)===null;}catch(_){}const detail={storageCleared:cleared,repairCleared:true,coffeeCleared:false};document.dispatchEvent(new CustomEvent('chief:local-clear',{detail}));clearPending=false;state=newState();$('clear-confirm').hidden=true;render(true);status(cleared&&detail.repairCleared&&detail.coffeeCleared?'This browser’s office file was cleared. A new shift is ready.':'The shift was reset on this page, but saved data could not be fully cleared. It may return after reload. Use your browser’s site-data controls to remove it.');});
   $('copy').addEventListener('click',async()=>{if(!currentCard)return;const text=cardText(currentCard);try{if(!navigator.clipboard?.writeText)throw Error('Clipboard unavailable');await navigator.clipboard.writeText(text);status('Review text copied. You choose where to share it.');}catch(_){$('copy-fallback').value=text;$('copy-fallback').hidden=false;$('copy-label').hidden=false;$('copy-fallback').focus();$('copy-fallback').select();status('Automatic copying was unavailable. Copy the selected review below.');}});
   function wrappedLines(ctx,text,maxWidth){const lines=[];for(const paragraph of String(text).split('\n')){let line='';for(const word of paragraph.split(/\s+/)){const next=line?line+' '+word:word;if(ctx.measureText(next).width>maxWidth&&line){lines.push(line);line=word;}else line=next;}lines.push(line);}return lines;}
   function makeCanvas(card){
@@ -295,7 +295,7 @@
 })();
 
   </script>
-</body>
+<script src="assets/coffee-progress.js"></script></body>
 </html>
 
 

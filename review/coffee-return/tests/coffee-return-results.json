@@ -1,5 +1,12 @@
 {
   "pass": true,
+  "office_resume_phases": 5,
+  "preview_internal_links_preserved": true,
+  "bfcache_and_cross_tab_reconcile": true,
+  "reload_phase_checks": 36,
+  "invalid_saves_rejected": 5,
+  "blocked_storage_playable": true,
+  "office_clear_removes_coffee": true,
   "original_receipts_unchanged": 6,
   "optional_return_routes": [
     {
@@ -59,6 +66,6 @@
   "replay_resets": 12,
   "cross_route_replay_cta_resets": 12,
   "network_requests_sent": 0,
-  "storage_changes": 0,
+  "storage_scope": "chief-coffee-shift-v1 only; personnel preserved except explicit office clear",
   "method": "Actual inline UI and feedback parser in minimal simulated DOM; no browser/layout/physical-device claims."
 }

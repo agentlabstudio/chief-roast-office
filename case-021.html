@@ -31,6 +31,7 @@
         <section class="desk" id="coffee-desk" aria-labelledby="desk-heading">
           <div class="desk-head"><h2 id="desk-heading">The break-room amendment</h2><span class="count" id="progress-text">Decision 1 of 2</span></div>
           <progress id="progress" max="2" value="0" aria-label="Coffee decisions completed"></progress>
+          <p class="fine" id="coffee-save-status" role="status">Choices stay in this browser. You can leave and return to the same shift.</p>
           <noscript><p>The interactive episode needs JavaScript. You can still read the complete original CASE-021 below and return to the office using the navigation.</p></noscript>
           <div id="decision">
             <div id="return-context" hidden><p class="eyebrow">Your first shift</p><p class="scene-copy" id="return-previous"></p></div>
@@ -62,7 +63,7 @@
             <div class="action-row"><button class="secondary" type="button" id="replay">Try another coffee policy</button><a class="secondary" href="personnel-game.html">Return to personnel</a></div>
             <p style="margin:18px 0 0"><a id="episode-feedback" href="index.html?feedback=coffee-20261015-review#game-feedback">Optional feedback for the development team →</a></p><p class="fine">Which choice changed the outcome? Tell us what was clear or confusing, if you wish. The feedback form is separate from the story.</p><p><a href="index.html?file=021#office-life">Read the original office file →</a></p>
           </div>
-          <p class="fine" style="border-top:1px solid var(--line);padding-top:16px;margin-top:24px">Scripted fiction. No sign-in. Your decisions stay on this page and reset when you reload.</p>
+          <p class="fine" style="border-top:1px solid var(--line);padding-top:16px;margin-top:24px">Scripted fiction. No sign-in. Your choices are saved only in this browser. “Try another coffee policy” clears this coffee shift. Clearing the office file in Personnel also clears it.</p>
         </section>
         <aside class="case-file" aria-labelledby="original-title">
           <figure class="art">
@@ -78,6 +79,7 @@
     </main>
     <footer class="footer"><div class="footer-nav"><a href="personnel-game.html">Personnel game</a><a href="index.html?file=021#office-life">Office life · CASE-021</a></div><p class="fine">The chair stays. The coffee requires less administration.</p></footer>
   </div>
+  <script src="assets/coffee-progress.js"></script>
   <script>
   'use strict';
   (() => {
@@ -271,6 +273,12 @@
     let policy = null;
     let route = null;
     let phase = 'policy';
+    let returnAction = null;
+    const progress = window.chiefCoffeeProgress;
+    // Reconcile the live page with an explicit clear or another tab's newer shift.
+    window.addEventListener('pageshow',event=>{if(event.persisted)window.location.reload();});
+    window.addEventListener('storage',event=>{if(event.key===progress.key||event.key===null)window.location.reload();});
+    function saveCoffee(){const ok=progress.write({version:1,policy,route,phase,action:returnAction});$('coffee-save-status').textContent=ok?'Saved in this browser. Return here to continue this shift.':'Local saving is unavailable. Keep this page open to finish your shift.';}
     const preview = new URLSearchParams(window.location.search).get('chief_preview') === '1';
     const feedbackBase = 'index.html?feedback=coffee-20261015-review' + (preview ? '&chief_preview=1' : '');
     $('episode-feedback').href = feedbackBase + '#game-feedback';
@@ -287,7 +295,7 @@
         $('decision').hidden=true;$('feedback').hidden=false;
         $('feedback-copy').textContent=policies[policy].feedback;
         $('feedback-chief').textContent=policies[policy].chief;
-        focus('feedback-heading');
+        focus('feedback-heading');saveCoffee();
       }else if(phase==='test'){
         const candidateRoute=policy+'/'+button.dataset.action;
         if(!Object.hasOwn(endings,candidateRoute))return;
@@ -295,15 +303,15 @@
         $('return-coffee').textContent=nextShiftInvitations[route];
         $('episode-feedback').href=feedbackBase+'&route='+encodeURIComponent(route)+'#game-feedback';
         phase='ending';status(2);$('decision').hidden=true;$('ending').hidden=false;
-        showReceipt(ending);
+        showReceipt(ending);saveCoffee();
       }else if(phase==='return'){
         const ending=returns[route].choices.find(choice=>choice.id===button.dataset.action);
         if(!ending)return;
-        phase='return-ending';status(3);$('decision').hidden=true;$('return-context').hidden=true;$('ending').hidden=false;
+        returnAction=ending.id;phase='return-ending';status(3);$('decision').hidden=true;$('return-context').hidden=true;$('ending').hidden=false;
         $('earlier-result').textContent=endings[route].result;$('earlier-receipt').hidden=false;
         $('return-coffee').hidden=true;$('ending-note').textContent='Three decisions filed. This fictional return follows your first shift and your latest choice.';
         $('episode-feedback').href=feedbackBase+'&route='+encodeURIComponent(route+'/'+ending.id)+'#game-feedback';
-        showReceipt(ending);
+        showReceipt(ending);saveCoffee();
       }
     });
     $('test-policy').addEventListener('click',()=>{
@@ -314,7 +322,7 @@
       for(const [action,label,note] of policies[policy].choices){
         addChoice(action,label,note);
       }
-      focus('scene-heading');
+      focus('scene-heading');saveCoffee();
     });
     $('return-coffee').addEventListener('click',()=>{
       if(phase!=='ending'||!Object.hasOwn(returns,route))return;
@@ -322,11 +330,13 @@
       $('return-previous').textContent=endings[route].result;
       $('scene-heading').textContent='The next shift inherits your rule.';$('scene-heading').setAttribute('aria-describedby','return-previous');$('scene-copy').textContent=returns[route].scene;
       $('choices').replaceChildren();for(const choice of returns[route].choices)addChoice(choice.id,choice.label,choice.note);
-      focus('scene-heading');
+      focus('scene-heading');saveCoffee();
     });
     $('replay').addEventListener('click',()=>{
       // Rebuild the initial controls without navigating or retaining a previous route.
       $('episode-feedback').href=feedbackBase+'#game-feedback';
+      const cleared=progress.clear();returnAction=null;
+      $('coffee-save-status').textContent=cleared?'Coffee choices cleared in this browser. A new policy is ready.':'Coffee reset on this page; saved choices could not be cleared and may return after reload.';
       policy=null;route=null;phase='policy';status(0);$('ending').hidden=true;$('feedback').hidden=true;$('decision').hidden=false;
       $('return-context').hidden=true;$('earlier-receipt').hidden=true;$('return-coffee').hidden=false;
       $('return-coffee').textContent='Take the next shift →';
@@ -343,6 +353,33 @@
       }
       focus('scene-heading');
     });
+    const loaded=progress.read();
+    if(!loaded.available)$('coffee-save-status').textContent='Local saving is unavailable. Keep this page open to finish your shift.';
+    const saved=loaded.state;
+    if(saved){
+      ({policy,route,phase,action:returnAction}=saved);
+      $('decision').hidden=true;$('feedback').hidden=true;$('ending').hidden=true;
+      if(phase==='feedback'){
+        status(1);$('feedback').hidden=false;
+        $('feedback-copy').textContent=policies[policy].feedback;$('feedback-chief').textContent=policies[policy].chief;
+      }else if(phase==='test'){
+        status(1);$('decision').hidden=false;$('scene-heading').textContent='The first empty-pot test.';
+        $('scene-copy').textContent=policies[policy].scene;$('choices').replaceChildren();
+        for(const [action,label,note] of policies[policy].choices)addChoice(action,label,note);
+      }else if(phase==='return'){
+        status(2);$('decision').hidden=false;$('return-context').hidden=false;
+        $('return-previous').textContent=endings[route].result;$('scene-heading').textContent='The next shift inherits your rule.';
+        $('scene-heading').setAttribute('aria-describedby','return-previous');$('scene-copy').textContent=returns[route].scene;
+        $('choices').replaceChildren();for(const choice of returns[route].choices)addChoice(choice.id,choice.label,choice.note);
+      }else{
+        const returned=phase==='return-ending';status(returned?3:2);$('ending').hidden=false;
+        $('return-coffee').textContent=nextShiftInvitations[route];$('return-coffee').hidden=returned;
+        $('episode-feedback').href=feedbackBase+'&route='+encodeURIComponent(route+(returned?'/'+returnAction:''))+'#game-feedback';
+        if(returned){$('earlier-result').textContent=endings[route].result;$('earlier-receipt').hidden=false;$('ending-note').textContent='Three decisions filed. This fictional return follows your first shift and your latest choice.';}
+        showReceipt(returned?returns[route].choices.find(choice=>choice.id===returnAction):endings[route]);
+      }
+      $('coffee-save-status').textContent='Your saved coffee shift was reopened in this browser.';
+    }
   })();
   </script>
 </body>
