@@ -275,10 +275,17 @@
     let phase = 'policy';
     let returnAction = null;
     const progress = window.chiefCoffeeProgress;
+    const loaded = progress.read();
+    let storageSnapshot = JSON.stringify(loaded.state);
     // Reconcile the live page with an explicit clear or another tab's newer shift.
-    window.addEventListener('pageshow',event=>{if(event.persisted)window.location.reload();});
+    // An unchanged/unreadable store cannot replace newer memory-only play.
+    window.addEventListener('pageshow',event=>{
+      if(!event.persisted)return;
+      const current=progress.read();
+      if(current.available&&JSON.stringify(current.state)!==storageSnapshot)window.location.reload();
+    });
     window.addEventListener('storage',event=>{if(event.key===progress.key||event.key===null)window.location.reload();});
-    function saveCoffee(){const ok=progress.write({version:1,policy,route,phase,action:returnAction});$('coffee-save-status').textContent=ok?'Saved in this browser. Return here to continue this shift.':'Local saving is unavailable. Keep this page open to finish your shift.';}
+    function saveCoffee(){const state={version:1,policy,route,phase,action:returnAction};const ok=progress.write(state);if(ok)storageSnapshot=JSON.stringify(state);$('coffee-save-status').textContent=ok?'Saved in this browser. Return here to continue this shift.':'Local saving is unavailable. Keep this page open to finish your shift.';}
     const preview = new URLSearchParams(window.location.search).get('chief_preview') === '1';
     const feedbackBase = 'index.html?feedback=coffee-20261015-review' + (preview ? '&chief_preview=1' : '');
     $('episode-feedback').href = feedbackBase + '#game-feedback';
@@ -336,6 +343,7 @@
       // Rebuild the initial controls without navigating or retaining a previous route.
       $('episode-feedback').href=feedbackBase+'#game-feedback';
       const cleared=progress.clear();returnAction=null;
+      if(cleared)storageSnapshot='null';
       $('coffee-save-status').textContent=cleared?'Coffee choices cleared in this browser. A new policy is ready.':'Coffee reset on this page; saved choices could not be cleared and may return after reload.';
       policy=null;route=null;phase='policy';status(0);$('ending').hidden=true;$('feedback').hidden=true;$('decision').hidden=false;
       $('return-context').hidden=true;$('earlier-receipt').hidden=true;$('return-coffee').hidden=false;
@@ -353,7 +361,6 @@
       }
       focus('scene-heading');
     });
-    const loaded=progress.read();
     if(!loaded.available)$('coffee-save-status').textContent='Local saving is unavailable. Keep this page open to finish your shift.';
     const saved=loaded.state;
     if(saved){

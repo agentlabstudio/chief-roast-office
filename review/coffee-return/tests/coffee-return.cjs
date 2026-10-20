@@ -15,7 +15,7 @@ class Element {
   contains(child){return child===this||this.children.some(c=>c.contains(child));}
   async click(){const event={target:this,preventDefault(){}};let current=this;while(current){for(const fn of current.listeners.click||[])await fn(event);current=current.parentNode;}}
 }
-function boot(file,{saved=null,blocked=false,search='',sourceFile=null,coffee=null,helperOnly=false}={}){
+function boot(file,{saved=null,blocked=false,writeBlocked=false,search='',sourceFile=null,coffee=null,helperOnly=false}={}){
   const html=fs.readFileSync(sourceFile || (fs.existsSync(path.join(root,'candidate',file)) ? path.join(root,'candidate',file) : path.resolve(root,'../..',file)),'utf8'),script=html.match(/<script>([\s\S]*?)<\/script>/)[1];
   const ids=new Map([...html.matchAll(/<([\w-]+)[^>]*\bid="([^"]+)"[^>]*>/g)].map(m=>{const el=new Element(m[1],m[2]);el.hidden=/\bhidden\b/.test(m[0]);el.className=m[0].match(/\bclass="([^"]*)"/)?.[1]||'';return[m[2],el];}));
   const data=new Map();if(saved)data.set('chief-office-shifts-v2',saved);if(coffee)data.set('chief-coffee-shift-v1',coffee);
@@ -23,7 +23,7 @@ function boot(file,{saved=null,blocked=false,search='',sourceFile=null,coffee=nu
   const anchors=[...html.matchAll(/<a[^>]+href="([^"]*)"[^>]*>/g)].map(m=>{const a=new Element('a');a.setAttribute('href',m[1]);a.href=m[1];return a;});
   const docListeners={};const doc={querySelectorAll:()=>anchors,getElementById:id=>{return ids.get(id)||null;},body:new Element('body'),createElement:tag=>{const e=new Element(tag);if(tag==='canvas'){e.getContext=()=>canvasContext;e.toBlob=cb=>cb({size:1});}return e;},dispatchEvent(event){for(const fn of docListeners[event.type]||[])fn(event);},addEventListener(type,fn){(docListeners[type]??=[]).push(fn);}};
   if(file==='case-021.html')for(const m of html.matchAll(/<button[^>]*data-policy="([^"]+)"[^>]*>([\s\S]*?)<\/button>/g)){const b=new Element('button');b.dataset.policy=m[1];ids.get('choices').appendChild(b);}
-  const storage={getItem:k=>{if(blocked)throw Error('blocked');return data.get(k)??null;},setItem:(k,v)=>{if(blocked)throw Error('blocked');data.set(k,v);},removeItem:k=>{if(blocked)throw Error('blocked');data.delete(k);}};
+  const storage={getItem:k=>{if(blocked)throw Error('blocked');return data.get(k)??null;},setItem:(k,v)=>{if(blocked||writeBlocked)throw Error('blocked');data.set(k,v);},removeItem:k=>{if(blocked)throw Error('blocked');data.delete(k);}};
   const windowListeners={};let reloadRequests=0;const context={window:{location:{search,href:'https://example.invalid/'+file+search,origin:'https://example.invalid',reload(){reloadRequests++;}},addEventListener(type,fn){(windowListeners[type]??=[]).push(fn);}},document:doc,localStorage:storage,navigator:{},CustomEvent:class{constructor(type,options){this.type=type;this.detail=options.detail;}},URLSearchParams,URL:Object.assign(URL,{createObjectURL:()=> 'blob:fixture',revokeObjectURL(){}}),setTimeout:()=>0};
   if(html.includes('src="assets/coffee-progress.js"'))vm.runInNewContext(fs.readFileSync(path.resolve(root,'../../assets/coffee-progress.js'),'utf8'),context);
   if(!helperOnly)vm.runInNewContext(script,context,{timeout:1000});return{anchors,ids,data,fills,context,html,windowEvent:(type,event)=>{for(const fn of windowListeners[type]||[])fn(event);},reloadRequests:()=>reloadRequests,$:id=>ids.get(id)};
@@ -140,6 +140,30 @@ function receipt(page){return ['ending-heading','ending-rule','ending-result','e
   }
   const blocked=boot('case-021.html',{blocked:true});await firstReceipt(blocked,'plain/show');assert.match(blocked.$('coffee-save-status').textContent,/unavailable/);assert.equal(blocked.$('ending').hidden,false);
   const coffeeSnapshot=JSON.stringify({version:1,policy:'plain',route:'plain/show',phase:'return',action:null});
+  // A BFCache return must not reload away a playable memory-only shift.
+  let memoryReturns=0;
+  for(const options of [{blocked:true},{writeBlocked:true},{writeBlocked:true,coffee:coffeeSnapshot}]){
+    const p=boot('case-021.html',options);
+    if(options.coffee){await p.$('choices').children.find(b=>b.dataset.action==='teach').click();}
+    else await firstReceipt(p,'plain/show');
+    const before=receipt(p),status=p.$('coffee-save-status').textContent;
+    p.windowEvent('pageshow',{persisted:false});assert.equal(p.reloadRequests(),0);
+    p.windowEvent('pageshow',{persisted:true});assert.equal(p.reloadRequests(),0,'BFCache preserves memory-only play');
+    assert.deepEqual(receipt(p),before);assert.equal(p.$('coffee-save-status').textContent,status);
+    p.windowEvent('storage',{key:null});assert.equal(p.reloadRequests(),1,'explicit cross-tab clear still wins');memoryReturns++;
+  }
+  const unchanged=boot('case-021.html');await firstReceipt(unchanged,'plain/show');
+  unchanged.windowEvent('pageshow',{persisted:true});assert.equal(unchanged.reloadRequests(),0,'unchanged saved shift needs no reload');
+  unchanged.data.set('chief-coffee-shift-v1',coffeeSnapshot);unchanged.windowEvent('pageshow',{persisted:true});
+  assert.equal(unchanged.reloadRequests(),1,'another saved phase replaces the cached page');
+  const unsavedClear=boot('case-021.html',{writeBlocked:true,coffee:coffeeSnapshot});
+  await unsavedClear.$('choices').children.find(b=>b.dataset.action==='teach').click();
+  unsavedClear.data.delete('chief-coffee-shift-v1');unsavedClear.windowEvent('pageshow',{persisted:true});
+  assert.equal(unsavedClear.reloadRequests(),1,'changed persisted clear wins over memory-only play');
+  const replayed=boot('case-021.html',{coffee:coffeeSnapshot});
+  await replayed.$('choices').children.find(b=>b.dataset.action==='teach').click();await replayed.$('replay').click();
+  replayed.windowEvent('pageshow',{persisted:true});assert.equal(replayed.reloadRequests(),0,'own replay updates persisted baseline');
+  assert.equal(replayed.$('choices').children.length,3);
   const personnel=boot('personnel-game.html',{coffee:coffeeSnapshot});await personnel.$('clear-file').click();await personnel.$('confirm-clear').click();assert.equal(personnel.data.has('chief-coffee-shift-v1'),false);
   const cached=boot('case-021.html',{coffee:coffeeSnapshot});cached.data.delete('chief-coffee-shift-v1');
   cached.windowEvent('pageshow',{persisted:true});assert.equal(cached.reloadRequests(),1);
@@ -155,7 +179,7 @@ function receipt(page){return ['ending-heading','ending-rule','ending-result','e
     for(const a of home.anchors){if(a.href.startsWith('https://example.invalid/')&&!/assets\//.test(a.href))assert.equal(new URL(a.href).searchParams.get('chief_preview'),'1');}
     home.data.clear();home.windowEvent('storage',{key:null});assert.equal(home.$('coffee-resume').hidden,true);
   }
-  const report={pass:true,office_resume_phases:5,preview_internal_links_preserved:true,bfcache_and_cross_tab_reconcile:true,reload_phase_checks:reloads,invalid_saves_rejected:5,blocked_storage_playable:true,office_clear_removes_coffee:true,original_receipts_unchanged:6,optional_return_routes:records,contextual_primary_ctas:6,replay_secondary_and_available:true,invalid_actions_or_contexts_rejected:invalid,allowed_feedback_contexts:contexts,legacy_contexts_unchanged:legacyContexts,replay_resets:12,cross_route_replay_cta_resets:12,network_requests_sent:0,storage_scope:'chief-coffee-shift-v1 only; personnel preserved except explicit office clear',method:'Actual inline UI and feedback parser in minimal simulated DOM; no browser/layout/physical-device claims.'};
+  const report={pass:true,office_resume_phases:5,preview_internal_links_preserved:true,bfcache_and_cross_tab_reconcile:true,bfcache_memory_return_cases:memoryReturns,bfcache_changed_store_and_clear_win:true,bfcache_own_save_and_replay_stable:true,reload_phase_checks:reloads,invalid_saves_rejected:5,blocked_storage_playable:true,office_clear_removes_coffee:true,original_receipts_unchanged:6,optional_return_routes:records,contextual_primary_ctas:6,replay_secondary_and_available:true,invalid_actions_or_contexts_rejected:invalid,allowed_feedback_contexts:contexts,legacy_contexts_unchanged:legacyContexts,replay_resets:12,cross_route_replay_cta_resets:12,network_requests_sent:0,storage_scope:'chief-coffee-shift-v1 only; personnel preserved except explicit office clear',method:'Actual inline UI and feedback parser in minimal simulated DOM; no browser/layout/physical-device claims.'};
   fs.writeFileSync(path.join(__dirname,'coffee-return-results.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify({...report,optional_return_routes:records.length}));
 })().catch(e=>{console.error(e.stack);process.exitCode=1;});
 
