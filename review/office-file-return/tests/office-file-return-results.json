@@ -1,0 +1,5 @@
+{
+  "status": "PASS",
+  "checks": 30,
+  "scope": "simulated DOM; no browser/layout QA"
+}
