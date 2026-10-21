@@ -31,6 +31,7 @@
   document.addEventListener('chief:local-clear', event => {
     const cleared = clear();
     if (event.detail) event.detail.coffeeCleared = cleared;
+    resume();
   });
   // QA mode follows internal navigation, so a review never becomes an audience visit.
   if (new URLSearchParams(window.location.search).get('chief_preview') === '1') {
