@@ -60,7 +60,8 @@
             </div>
             <p class="fine" id="ending-note">Two decisions filed. This receipt follows the route you chose; it is a fictional office outcome. The next shift is one more decision, available now.</p>
             <div class="action-row"><button class="primary" type="button" id="return-coffee">Take the next shift →</button></div>
-            <div class="action-row"><button class="secondary" type="button" id="replay">Try another coffee policy</button><a class="secondary" href="personnel-game.html">Return to personnel</a></div>
+            <div class="action-row"><button class="secondary" type="button" id="revisit-return" hidden aria-describedby="revisit-note">Revisit next-shift decision</button><button class="secondary" type="button" id="replay">Try another coffee policy</button><a class="secondary" href="personnel-game.html">Return to personnel</a></div>
+            <p class="fine" id="revisit-note" hidden>Keep your first shift. Reopen the last decision to try its other tradeoff; your new choice replaces the next-shift receipt.</p>
             <p style="margin:18px 0 0"><a id="episode-feedback" href="index.html?feedback=coffee-20261015-review#game-feedback">Optional feedback for the development team →</a></p><p class="fine">Which choice changed the outcome? Tell us what was clear or confusing, if you wish. The feedback form is separate from the story.</p><p><a href="index.html?file=021#office-life">Read the original office file →</a></p>
           </div>
           <p class="fine" style="border-top:1px solid var(--line);padding-top:16px;margin-top:24px">Scripted fiction. No sign-in. Your choices are saved only in this browser. “Try another coffee policy” clears this coffee shift. Clearing the office file in Personnel also clears it.</p>
@@ -316,7 +317,7 @@
         if(!ending)return;
         returnAction=ending.id;phase='return-ending';status(3);$('decision').hidden=true;$('return-context').hidden=true;$('ending').hidden=false;
         $('earlier-result').textContent=endings[route].result;$('earlier-receipt').hidden=false;
-        $('return-coffee').hidden=true;$('ending-note').textContent='Three decisions filed. This fictional return follows your first shift and your latest choice.';
+        $('return-coffee').hidden=true;$('revisit-return').hidden=false;$('revisit-note').hidden=false;$('ending-note').textContent='Three decisions filed. This fictional return follows your first shift and your latest choice.';
         $('episode-feedback').href=feedbackBase+'&route='+encodeURIComponent(route+'/'+ending.id)+'#game-feedback';
         showReceipt(ending);saveCoffee();
       }
@@ -331,13 +332,23 @@
       }
       focus('scene-heading');saveCoffee();
     });
-    $('return-coffee').addEventListener('click',()=>{
-      if(phase!=='ending'||!Object.hasOwn(returns,route))return;
+    function openNextShift(){
+      returnAction=null;
       phase='return';status(2);$('ending').hidden=true;$('decision').hidden=false;$('return-context').hidden=false;
+      $('earlier-receipt').hidden=true;$('revisit-return').hidden=true;$('revisit-note').hidden=true;
+      $('episode-feedback').href=feedbackBase+'&route='+encodeURIComponent(route)+'#game-feedback';
       $('return-previous').textContent=endings[route].result;
       $('scene-heading').textContent='The next shift inherits your rule.';$('scene-heading').setAttribute('aria-describedby','return-previous');$('scene-copy').textContent=returns[route].scene;
       $('choices').replaceChildren();for(const choice of returns[route].choices)addChoice(choice.id,choice.label,choice.note);
       focus('scene-heading');saveCoffee();
+    }
+    $('return-coffee').addEventListener('click',()=>{
+      if(phase!=='ending'||!Object.hasOwn(returns,route))return;
+      openNextShift();
+    });
+    $('revisit-return').addEventListener('click',()=>{
+      if(phase!=='return-ending'||!Object.hasOwn(returns,route))return;
+      openNextShift();
     });
     $('replay').addEventListener('click',()=>{
       // Rebuild the initial controls without navigating or retaining a previous route.
@@ -346,7 +357,7 @@
       if(cleared)storageSnapshot='null';
       $('coffee-save-status').textContent=cleared?'Coffee choices cleared in this browser. A new policy is ready.':'Coffee reset on this page; saved choices could not be cleared and may return after reload.';
       policy=null;route=null;phase='policy';status(0);$('ending').hidden=true;$('feedback').hidden=true;$('decision').hidden=false;
-      $('return-context').hidden=true;$('earlier-receipt').hidden=true;$('return-coffee').hidden=false;
+      $('return-context').hidden=true;$('earlier-receipt').hidden=true;$('return-coffee').hidden=false;$('revisit-return').hidden=true;$('revisit-note').hidden=true;
       $('return-coffee').textContent='Take the next shift →';
       $('ending-note').textContent='Two decisions filed. This receipt follows the route you chose; it is a fictional office outcome. The next shift is one more decision, available now.';
       $('scene-heading').textContent='What stays on the coffee notice?';$('scene-heading').removeAttribute('aria-describedby');
@@ -382,7 +393,7 @@
         const returned=phase==='return-ending';status(returned?3:2);$('ending').hidden=false;
         $('return-coffee').textContent=nextShiftInvitations[route];$('return-coffee').hidden=returned;
         $('episode-feedback').href=feedbackBase+'&route='+encodeURIComponent(route+(returned?'/'+returnAction:''))+'#game-feedback';
-        if(returned){$('earlier-result').textContent=endings[route].result;$('earlier-receipt').hidden=false;$('ending-note').textContent='Three decisions filed. This fictional return follows your first shift and your latest choice.';}
+        if(returned){$('earlier-result').textContent=endings[route].result;$('earlier-receipt').hidden=false;$('revisit-return').hidden=false;$('revisit-note').hidden=false;$('ending-note').textContent='Three decisions filed. This fictional return follows your first shift and your latest choice.';}
         showReceipt(returned?returns[route].choices.find(choice=>choice.id===returnAction):endings[route]);
       }
       $('coffee-save-status').textContent='Your saved coffee shift was reopened in this browser.';
