@@ -18,10 +18,12 @@ let checks=0;
     await p.$('return-coffee').click();await p.$('choices').children.find(b=>b.dataset.action===action).click();
     const oldReceipt=receipt(p),oldSave=p.data.get('chief-coffee-shift-v1');
     assert.equal(p.$('revisit-return').hidden,false);
+    // Earlier choices also focused this heading; require a fresh transfer now.
+    p.$('scene-heading').focused=false;
     await p.$('revisit-return').click();
     assert.equal(p.$('decision').hidden,false);assert.equal(p.$('ending').hidden,true);
     assert.equal(p.$('return-context').hidden,false);assert.equal(p.$('return-previous').textContent,first);
-    assert.equal(p.$('scene-heading').focused,true);assert.equal(p.$('progress').value,2);
+    assert.equal(p.$('scene-heading').focused,true,'revisit must freshly focus the decision heading');assert.equal(p.$('progress').value,2);
     assert.equal(p.$('revisit-return').hidden,true);assert.equal(p.$('revisit-note').hidden,true);
     assert.equal(p.$('earlier-receipt').hidden,true);
     const state=JSON.parse(p.data.get('chief-coffee-shift-v1'));
