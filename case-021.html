@@ -42,7 +42,7 @@
               <button class="choice" type="button" data-policy="sign"><strong>Keep the policy. Add a signature box.</strong><span>Every cup gets a signed record. Someone still has to check those records.</span></button>
               <button class="choice" type="button" data-policy="none"><strong>Remove every rule. Coffee will find a way.</strong><span>The paperwork goes. Responsibility for the empty pot goes with it.</span></button>
             </div>
-            <p class="fine">Your choice is filed immediately. You can try another route after the receipt.</p>
+            <p class="fine">Your choice is filed immediately. You can start another policy at any time; this clears your coffee shift.</p>
           </div>
           <div id="feedback" hidden>
             <h3 id="feedback-heading" tabindex="-1">The notice is up.</h3>
@@ -60,10 +60,12 @@
             </div>
             <p class="fine" id="ending-note">Two decisions filed. This receipt follows the route you chose; it is a fictional office outcome. The next shift is one more decision, available now.</p>
             <div class="action-row"><button class="primary" type="button" id="return-coffee">Take the next shift →</button></div>
-            <div class="action-row"><button class="secondary" type="button" id="revisit-return" hidden aria-describedby="revisit-note">Revisit next-shift decision</button><button class="secondary" type="button" id="replay">Try another coffee policy</button><a class="secondary" href="personnel-game.html">Return to personnel</a></div>
+            <div class="action-row"><button class="secondary" type="button" id="revisit-return" hidden aria-describedby="revisit-note">Revisit next-shift decision</button><a class="secondary" href="personnel-game.html">Return to personnel</a></div>
             <p class="fine" id="revisit-note" hidden>Keep your first shift. Reopen the last decision to try its other tradeoff; your new choice replaces the next-shift receipt.</p>
             <p style="margin:18px 0 0"><a id="episode-feedback" href="index.html?feedback=coffee-20261015-review#game-feedback">Optional feedback for the development team →</a></p><p class="fine">Which choice changed the outcome? Tell us what was clear or confusing, if you wish. The feedback form is separate from the story.</p><p><a href="index.html?file=021#office-life">Read the original office file →</a></p>
           </div>
+          <div class="action-row" id="replay-actions" hidden><button class="secondary" type="button" id="replay" aria-describedby="replay-note">Try another coffee policy</button></div>
+          <p class="fine" id="replay-note" hidden>Clears this coffee shift only. Your Personnel shift and opened office files stay unchanged.</p>
           <p class="fine" style="border-top:1px solid var(--line);padding-top:16px;margin-top:24px">Scripted fiction. No sign-in. Your choices are saved only in this browser. “Try another coffee policy” clears this coffee shift. Clearing the office file in Personnel also clears it.</p>
         </section>
         <aside class="case-file" aria-labelledby="original-title">
@@ -290,6 +292,7 @@
     const preview = new URLSearchParams(window.location.search).get('chief_preview') === '1';
     const feedbackBase = 'index.html?feedback=coffee-20261015-review' + (preview ? '&chief_preview=1' : '');
     $('episode-feedback').href = feedbackBase + '#game-feedback';
+    function showReplay(visible){$('replay-actions').hidden=!visible;$('replay-note').hidden=!visible;}
     function focus(id){$(id).focus();}
     function status(done){const total=phase==='return'||phase==='return-ending'?3:2;$('progress').max=total;$('progress').value=done;$('progress-text').textContent=done===total?done+' decisions filed':'Decision '+(done+1)+' of '+total;}
     function showReceipt(ending){for(const [id,key] of [['ending-heading','title'],['ending-rule','rule'],['ending-result','result'],['ending-next','next'],['ending-chief','chief'],['ending-stamp','stamp']])$(id).textContent=ending[key];focus('ending-heading');}
@@ -299,7 +302,7 @@
       if(!button || !$('choices').contains(button))return;
       if(phase==='policy'){
         if(!Object.hasOwn(policies,button.dataset.policy))return;
-        policy=button.dataset.policy;phase='feedback';status(1);
+        policy=button.dataset.policy;phase='feedback';status(1);showReplay(true);
         $('decision').hidden=true;$('feedback').hidden=false;
         $('feedback-copy').textContent=policies[policy].feedback;
         $('feedback-chief').textContent=policies[policy].chief;
@@ -356,7 +359,7 @@
       const cleared=progress.clear();returnAction=null;
       if(cleared)storageSnapshot='null';
       $('coffee-save-status').textContent=cleared?'Coffee choices cleared in this browser. A new policy is ready.':'Coffee reset on this page; saved choices could not be cleared and may return after reload.';
-      policy=null;route=null;phase='policy';status(0);$('ending').hidden=true;$('feedback').hidden=true;$('decision').hidden=false;
+      policy=null;route=null;phase='policy';status(0);showReplay(false);$('ending').hidden=true;$('feedback').hidden=true;$('decision').hidden=false;
       $('return-context').hidden=true;$('earlier-receipt').hidden=true;$('return-coffee').hidden=false;$('revisit-return').hidden=true;$('revisit-note').hidden=true;
       $('return-coffee').textContent='Take the next shift →';
       $('ending-note').textContent='Two decisions filed. This receipt follows the route you chose; it is a fictional office outcome. The next shift is one more decision, available now.';
@@ -375,6 +378,7 @@
     if(!loaded.available)$('coffee-save-status').textContent='Local saving is unavailable. Keep this page open to finish your shift.';
     const saved=loaded.state;
     if(saved){
+      showReplay(true);
       ({policy,route,phase,action:returnAction}=saved);
       $('decision').hidden=true;$('feedback').hidden=true;$('ending').hidden=true;
       if(phase==='feedback'){
