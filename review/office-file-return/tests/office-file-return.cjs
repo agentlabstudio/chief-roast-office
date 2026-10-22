@@ -8,7 +8,7 @@ const source=html.slice(a,b),cards=JSON.parse(fs.readFileSync(path.join(root,'ca
 const seenKey='roast_office_drawn_v1',currentKey='roast_office_current_file_v1';
 function boot({data=new Map(),blocked=false,writeBlocked=false}={}){
  const ids=new Map(),events={},packs=['receipts','systems','office'].map(name=>({dataset:{pack:name},addEventListener(t,f){this.click=f;}}));
- for(const id of ['drawn-file','drawn-code','drawn-title','drawn-verdict','drawn-repair','drawn-return','drawn-image','drawn-download','deck-status','clear-drawn'])ids.set(id,{hidden:id==='drawn-file',textContent:'',focus(){this.focused=true;},addEventListener(t,f){this.click=f;}});
+ for(const id of ['drawn-file','drawn-code','drawn-title','drawn-verdict','drawn-repair','drawn-return','drawn-image','drawn-download','drawn-play','deck-status','clear-drawn'])ids.set(id,{hidden:id==='drawn-file'||id==='drawn-play',textContent:'',focus(){this.focused=true;},addEventListener(t,f){this.click=f;}});
  const storage={getItem(k){if(blocked)throw Error('blocked');return data.get(k)??null;},setItem(k,v){if(blocked||writeBlocked)throw Error('blocked');data.set(k,v);},removeItem(k){if(blocked)throw Error('blocked');data.delete(k);}};
  vm.runInNewContext(source,{cards,localStorage:storage,document:{getElementById:id=>ids.get(id),querySelectorAll:()=>packs},window:{addEventListener(t,f){events[t]=f;}},Math:Object.assign(Object.create(Math),{random:()=>0})});
  return{data,ids,packs,event:(t,key)=>events[t]({key}),block:()=>blocked=true};
