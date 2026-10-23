@@ -38,7 +38,7 @@ let checks=0;
     assert.equal(JSON.parse(q.data.get('chief-coffee-shift-v1')).action,other);
     assert.equal(new URL(q.$('episode-feedback').href,'https://example.invalid').searchParams.get('chief_preview'),'1');
     const restored=open({coffee:q.data.get('chief-coffee-shift-v1')});assert.equal(restored.$('revisit-return').hidden,false);
-    await restored.$('revisit-return').click();await restored.$('replay').click();
+    await restored.$('revisit-return').click();await restored.$('replay').click();await restored.$('confirm-replay').click();
     assert.equal(restored.data.has('chief-coffee-shift-v1'),false);assert.equal(restored.$('revisit-return').hidden,true);
     assert.equal(restored.$('choices').children.length,3);
     // Readable but write-denied storage must not erase the in-memory revisit on BFCache return.

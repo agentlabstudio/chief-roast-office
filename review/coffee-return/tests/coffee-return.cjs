@@ -43,6 +43,7 @@ const expectedInvitations={
   'none/wait':'Next shift: who will end the waiting? →'
 };
 async function firstReceipt(page,route){const [policy,action]=route.split('/');await page.$('choices').children.find(b=>b.dataset.policy===policy).click();await page.$('test-policy').click();await page.$('choices').children.find(b=>b.dataset.action===action).click();}
+async function resetCoffee(page){await page.$('replay').click();await page.$('confirm-replay').click();}
 function receipt(page){return ['ending-heading','ending-rule','ending-result','ending-next','ending-chief','ending-stamp'].map(id=>page.$(id).textContent);}
 (async()=>{
   const records=[];const distinct=new Set();let invalid=0;
@@ -78,7 +79,7 @@ function receipt(page){return ['ending-heading','ending-rule','ending-result','e
       assert.equal(url.searchParams.get('feedback'),'coffee-20261015-review');assert.equal(url.searchParams.get('route'),route+'/'+action);assert.equal(url.searchParams.get('chief_preview'),'1');
       const final=receipt(p);await p.$('return-coffee').click();await target.click();assert.deepEqual(receipt(p),final,'duplicate/stale completion cannot advance');
       distinct.add(p.$('ending-heading').textContent);records.push({route:route+'/'+action,title:p.$('ending-heading').textContent});
-      await p.$('replay').click();assert.equal(p.$('progress').value,0);assert.equal(p.$('progress').max,2);
+      await resetCoffee(p);assert.equal(p.$('progress').value,0);assert.equal(p.$('progress').max,2);
       assert.equal(p.$('ending').hidden,true);assert.equal(p.$('return-context').hidden,true);assert.equal(p.$('earlier-receipt').hidden,true);assert.equal(p.$('return-coffee').hidden,false);
       assert.equal(p.$('choices').children.length,3);assert.ok(!p.$('episode-feedback').href.includes('route='));assert.equal(p.data.size,0);
       assert.equal(p.$('return-coffee').textContent,'Take the next shift →');assert.equal(p.$('return-coffee').className,'primary');assert.equal(p.$('replay').className,'secondary');
@@ -132,7 +133,7 @@ function receipt(page){return ['ending-heading','ending-rule','ending-result','e
       assert.equal(q.$('return-coffee').hidden,true);
       const stable=q.data.get('chief-coffee-shift-v1');await q.$('return-coffee').click();assert.equal(q.data.get('chief-coffee-shift-v1'),stable);
       assert.equal(q.data.get('chief-office-shifts-v2'),'untouched-personnel');
-      await q.$('replay').click();assert.equal(q.data.has('chief-coffee-shift-v1'),false);assert.equal(q.data.get('chief-office-shifts-v2'),'untouched-personnel');
+      await resetCoffee(q);assert.equal(q.data.has('chief-coffee-shift-v1'),false);assert.equal(q.data.get('chief-office-shifts-v2'),'untouched-personnel');
     }
   }
   for(const coffee of ['{bad','null',JSON.stringify({version:2,policy:'plain'}),JSON.stringify({version:1,policy:'none',route:'plain/show',phase:'return',action:null}),JSON.stringify({version:1,policy:'plain',route:'plain/show',phase:'return-ending',action:'rotate'})]){
@@ -161,7 +162,7 @@ function receipt(page){return ['ending-heading','ending-rule','ending-result','e
   unsavedClear.data.delete('chief-coffee-shift-v1');unsavedClear.windowEvent('pageshow',{persisted:true});
   assert.equal(unsavedClear.reloadRequests(),1,'changed persisted clear wins over memory-only play');
   const replayed=boot('case-021.html',{coffee:coffeeSnapshot});
-  await replayed.$('choices').children.find(b=>b.dataset.action==='teach').click();await replayed.$('replay').click();
+  await replayed.$('choices').children.find(b=>b.dataset.action==='teach').click();await resetCoffee(replayed);
   replayed.windowEvent('pageshow',{persisted:true});assert.equal(replayed.reloadRequests(),0,'own replay updates persisted baseline');
   assert.equal(replayed.$('choices').children.length,3);
   const personnel=boot('personnel-game.html',{coffee:coffeeSnapshot});await personnel.$('clear-file').click();await personnel.$('confirm-clear').click();assert.equal(personnel.data.has('chief-coffee-shift-v1'),false);

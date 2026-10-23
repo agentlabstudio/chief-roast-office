@@ -66,6 +66,11 @@
           </div>
           <div class="action-row" id="replay-actions" hidden><button class="secondary" type="button" id="replay" aria-describedby="replay-note">Try another coffee policy</button></div>
           <p class="fine" id="replay-note" hidden>Clears this coffee shift only. Your Personnel shift and opened office files stay unchanged.</p>
+          <div id="replay-confirmation" hidden aria-labelledby="replay-confirmation-title">
+            <h3 id="replay-confirmation-title" tabindex="-1">Start a new coffee policy?</h3>
+            <p class="scene-copy">This clears this coffee shift and its receipts. Your Personnel shift and opened office files stay unchanged.</p>
+            <div class="action-row"><button class="primary" type="button" id="confirm-replay">Clear coffee shift and start again</button><button class="secondary" type="button" id="cancel-replay">Keep current shift</button></div>
+          </div>
           <p class="fine" style="border-top:1px solid var(--line);padding-top:16px;margin-top:24px">Scripted fiction. No sign-in. Your choices are saved only in this browser. “Try another coffee policy” clears this coffee shift. Clearing the office file in Personnel also clears it.</p>
         </section>
         <aside class="case-file" aria-labelledby="original-title">
@@ -293,6 +298,7 @@
     const feedbackBase = 'index.html?feedback=coffee-20261015-review' + (preview ? '&chief_preview=1' : '');
     $('episode-feedback').href = feedbackBase + '#game-feedback';
     function showReplay(visible){$('replay-actions').hidden=!visible;$('replay-note').hidden=!visible;}
+    function closeReplayConfirmation(){if($('replay-confirmation').hidden)return;$('replay-confirmation').hidden=true;showReplay(phase!=='policy');}
     function focus(id){$(id).focus();}
     function status(done){const total=phase==='return'||phase==='return-ending'?3:2;$('progress').max=total;$('progress').value=done;$('progress-text').textContent=done===total?done+' decisions filed':'Decision '+(done+1)+' of '+total;}
     function showReceipt(ending){for(const [id,key] of [['ending-heading','title'],['ending-rule','rule'],['ending-result','result'],['ending-next','next'],['ending-chief','chief'],['ending-stamp','stamp']])$(id).textContent=ending[key];focus('ending-heading');}
@@ -302,6 +308,7 @@
       if(!button || !$('choices').contains(button))return;
       if(phase==='policy'){
         if(!Object.hasOwn(policies,button.dataset.policy))return;
+        closeReplayConfirmation();
         policy=button.dataset.policy;phase='feedback';status(1);showReplay(true);
         $('decision').hidden=true;$('feedback').hidden=false;
         $('feedback-copy').textContent=policies[policy].feedback;
@@ -310,6 +317,7 @@
       }else if(phase==='test'){
         const candidateRoute=policy+'/'+button.dataset.action;
         if(!Object.hasOwn(endings,candidateRoute))return;
+        closeReplayConfirmation();
         route=candidateRoute;const ending=endings[route];
         $('return-coffee').textContent=nextShiftInvitations[route];
         $('episode-feedback').href=feedbackBase+'&route='+encodeURIComponent(route)+'#game-feedback';
@@ -318,6 +326,7 @@
       }else if(phase==='return'){
         const ending=returns[route].choices.find(choice=>choice.id===button.dataset.action);
         if(!ending)return;
+        closeReplayConfirmation();
         returnAction=ending.id;phase='return-ending';status(3);$('decision').hidden=true;$('return-context').hidden=true;$('ending').hidden=false;
         $('earlier-result').textContent=endings[route].result;$('earlier-receipt').hidden=false;
         $('return-coffee').hidden=true;$('revisit-return').hidden=false;$('revisit-note').hidden=false;$('ending-note').textContent='Three decisions filed. This fictional return follows your first shift and your latest choice.';
@@ -327,6 +336,7 @@
     });
     $('test-policy').addEventListener('click',()=>{
       if(phase!=='feedback')return;
+      closeReplayConfirmation();
       phase='test';$('feedback').hidden=true;$('decision').hidden=false;
       $('scene-heading').textContent='The first empty-pot test.';$('scene-copy').textContent=policies[policy].scene;
       $('choices').replaceChildren();
@@ -336,6 +346,7 @@
       focus('scene-heading');saveCoffee();
     });
     function openNextShift(){
+      closeReplayConfirmation();
       returnAction=null;
       phase='return';status(2);$('ending').hidden=true;$('decision').hidden=false;$('return-context').hidden=false;
       $('earlier-receipt').hidden=true;$('revisit-return').hidden=true;$('revisit-note').hidden=true;
@@ -354,12 +365,21 @@
       openNextShift();
     });
     $('replay').addEventListener('click',()=>{
+      if(phase==='policy'||!$('replay-confirmation').hidden)return;
+      showReplay(false);$('replay-confirmation').hidden=false;focus('replay-confirmation-title');
+    });
+    $('cancel-replay').addEventListener('click',()=>{
+      if($('replay-confirmation').hidden)return;
+      $('replay-confirmation').hidden=true;showReplay(true);focus('replay');
+    });
+    $('confirm-replay').addEventListener('click',()=>{
+      if($('replay-confirmation').hidden||phase==='policy')return;
       // Rebuild the initial controls without navigating or retaining a previous route.
       $('episode-feedback').href=feedbackBase+'#game-feedback';
       const cleared=progress.clear();returnAction=null;
       if(cleared)storageSnapshot='null';
       $('coffee-save-status').textContent=cleared?'Coffee choices cleared in this browser. A new policy is ready.':'Coffee reset on this page; saved choices could not be cleared and may return after reload.';
-      policy=null;route=null;phase='policy';status(0);showReplay(false);$('ending').hidden=true;$('feedback').hidden=true;$('decision').hidden=false;
+      policy=null;route=null;phase='policy';status(0);$('replay-confirmation').hidden=true;showReplay(false);$('ending').hidden=true;$('feedback').hidden=true;$('decision').hidden=false;
       $('return-context').hidden=true;$('earlier-receipt').hidden=true;$('return-coffee').hidden=false;$('revisit-return').hidden=true;$('revisit-note').hidden=true;
       $('return-coffee').textContent='Take the next shift →';
       $('ending-note').textContent='Two decisions filed. This receipt follows the route you chose; it is a fictional office outcome. The next shift is one more decision, available now.';
