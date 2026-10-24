@@ -9,7 +9,7 @@ const currentKey='roast_office_current_file_v1',seenKey='roast_office_drawn_v1';
 let checks=0;
 function test(name,fn){fn();checks++;console.log('PASS '+name);}
 function boot({current=null,blocked=false,writeBlocked=false,preview=false,random=0}={}){
-  const ids=new Map([...html.matchAll(/<[^>]+\bid="([^"]+)"[^>]*>/g)].map(m=>[m[1],{hidden:/\bhidden\b/.test(m[0]),href:m[0].match(/href="([^"]+)"/)?.[1],textContent:'',focus(){},addEventListener(t,f){this[t]=f;}}]));
+  const ids=new Map([...html.matchAll(/<[^>]+\bid="([^"]+)"[^>]*>/g)].map(m=>[m[1],{hidden:/\bhidden\b/.test(m[0]),href:m[0].match(/href="([^"]+)"/)?.[1],textContent:'',attributes:{},focus(){this.focused=true;},setAttribute(k,v){this.attributes[k]=v;},addEventListener(t,f){this[t]=f;}}]));
   const anchors=[...html.matchAll(/<a[^>]*href="([^"]+)"[^>]*>/g)].map(m=>{const id=m[0].match(/\bid="([^"]+)"/)?.[1];const a=ids.get(id)||{};a.getAttribute=()=>m[1];return a;});
   const data=new Map([['chief-coffee-shift-v1','unchanged coffee'],['chief-office-shifts-v2','unchanged personnel']]);
   if(current!==null)data.set(currentKey,current);
@@ -40,7 +40,7 @@ test('switching to another file removes a stale coffee action',()=>{const p=boot
 test('cross-tab return, replacement and clear reconcile the contextual action',()=>{
   const p=boot({current:'015'});p.data.set(currentKey,'021');p.emit('storage',currentKey);assert.equal(p.ids.get('drawn-play').hidden,false);
   p.data.set(currentKey,'016');p.emit('pageshow');assert.equal(p.ids.get('drawn-play').hidden,true);
-  p.data.set(currentKey,'021');p.emit('storage',currentKey);p.ids.get('clear-drawn').click();assert.equal(p.ids.get('drawn-file').hidden,true);
+  p.data.set(currentKey,'021');p.emit('storage',currentKey);p.ids.get('clear-drawn').click();p.ids.get('confirm-clear-drawn').click();assert.equal(p.ids.get('drawn-file').hidden,true);
 });
 for(const options of [{blocked:true},{writeBlocked:true}])test('memory-only coffee draw remains playable with '+JSON.stringify(options),()=>{const p=boot({...options,random:.999999});p.packs[2].click();assert.equal(p.ids.get('drawn-play').hidden,false);p.emit('pageshow');assert.equal(p.ids.get('drawn-file').hidden,false);assert.equal(p.ids.get('drawn-play').hidden,false);});
 test('private preview survives late card rendering and retains the decision fragment',()=>{
@@ -49,3 +49,4 @@ test('private preview survives late card rendering and retains the decision frag
   const game=fs.readFileSync(path.join(root,'case-021.html'),'utf8');assert.match(game,/id="coffee-desk"/);
 });
 console.log(`${checks} source/VM tests passed; not browser, focus or layout QA.`);
+
