@@ -289,6 +289,7 @@
     // An unchanged/unreadable store cannot replace newer memory-only play.
     window.addEventListener('pageshow',event=>{
       if(!event.persisted)return;
+      closeReplayConfirmation(true);
       const current=progress.read();
       if(current.available&&JSON.stringify(current.state)!==storageSnapshot)window.location.reload();
     });
@@ -298,7 +299,13 @@
     const feedbackBase = 'index.html?feedback=coffee-20261015-review' + (preview ? '&chief_preview=1' : '');
     $('episode-feedback').href = feedbackBase + '#game-feedback';
     function showReplay(visible){$('replay-actions').hidden=!visible;$('replay-note').hidden=!visible;}
-    function closeReplayConfirmation(){if($('replay-confirmation').hidden)return;$('replay-confirmation').hidden=true;showReplay(phase!=='policy');}
+    function closeReplayConfirmation(restoreFocus=false){
+      const confirmation=$('replay-confirmation');
+      if(confirmation.hidden)return;
+      const hadFocus=confirmation.contains(document.activeElement);
+      confirmation.hidden=true;showReplay(phase!=='policy');
+      if(restoreFocus&&hadFocus)focus('replay');
+    }
     function focus(id){$(id).focus();}
     function status(done){const total=phase==='return'||phase==='return-ending'?3:2;$('progress').max=total;$('progress').value=done;$('progress-text').textContent=done===total?done+' decisions filed':'Decision '+(done+1)+' of '+total;}
     function showReceipt(ending){for(const [id,key] of [['ending-heading','title'],['ending-rule','rule'],['ending-result','result'],['ending-next','next'],['ending-chief','chief'],['ending-stamp','stamp']])$(id).textContent=ending[key];focus('ending-heading');}
@@ -426,3 +433,4 @@
   </script>
 </body>
 </html>
+
