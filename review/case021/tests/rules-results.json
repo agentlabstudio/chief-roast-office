@@ -1,0 +1,10 @@
+{
+  "pass": true,
+  "shift_routes": 972,
+  "equal_state_transitions": 11178,
+  "score_effects_unchanged": 33,
+  "repair_model_and_ui_byte_identical": true,
+  "opening_consequences_checked": 729,
+  "storage_key_unchanged": true,
+  "method": "Pure rules and saved-state regression; no browser or network"
+}
