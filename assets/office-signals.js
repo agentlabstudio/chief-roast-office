@@ -47,10 +47,32 @@
     return parent;
   }
 
+  function feedbackContext(query, pageContext) {
+    const key = query.get('feedback') || pageContext;
+    if (key === 'personnel-20261015') return {
+      label: 'Personnel game · personnel-20261015',
+      returnLabel: 'Return to your personnel shift',
+      returnHref: 'personnel-game.html'
+    };
+    if (!['coffee-20261015', 'coffee-20261015-return', 'coffee-20261015-review'].includes(key)) return null;
+    const route = query.get('route');
+    const knownRoutes = ['plain/show', 'plain/point', 'sign/replace', 'sign/audit', 'none/assign', 'none/wait'];
+    if (key === 'coffee-20261015-return' || key === 'coffee-20261015-review') knownRoutes.push('plain/show/teach', 'plain/show/chief', 'plain/point/show', 'plain/point/pair', 'sign/replace/backup', 'sign/replace/batch', 'sign/audit/release', 'sign/audit/finish', 'none/assign/split', 'none/assign/round', 'none/wait/volunteer', 'none/wait/rotate');
+    return {
+      label: 'Coffee CASE-021 · ' + key + (knownRoutes.includes(route) ? ' · route ' + route : ''),
+      returnLabel: 'Try another coffee policy',
+      returnHref: 'case-021.html'
+    };
+  }
+
   function init() {
     const site = document.body && document.body.getAttribute('data-chief-site');
     if (!SITES.includes(site) || document.querySelector('[data-chief-signals]')) return;
-    const preview = new URLSearchParams(window.location?.search || '').get('chief_preview') === '1';
+    const query = new URLSearchParams(window.location?.search || '');
+    const preview = query.get('chief_preview') === '1';
+    const context = feedbackContext(query, document.body.getAttribute('data-chief-feedback'));
+    const contextPrefix = context ? '[' + context.label + ']\n' : '';
+    const maximumDraftLength = 1200 - contextPrefix.length;
 
     let session = null;
     let sessionMemoryUnavailable = false;
@@ -113,6 +135,8 @@
     append(panel, officeLink);
 
     const details = element('details', 'chief-signals__feedback');
+    details.id = 'game-feedback';
+    details.open = Boolean(context && query.get('feedback'));
     append(details, element('summary', '', 'Leave optional development feedback'));
     const form = element('form', 'chief-signals__form');
     form.setAttribute('aria-label', 'Optional development feedback');
@@ -132,12 +156,12 @@
     const text = element('textarea', 'chief-signals__text');
     text.id = 'chief-signals-text';
     text.name = 'text';
-    text.maxLength = 1200;
+    text.maxLength = maximumDraftLength;
     text.minLength = 3;
     text.rows = 4;
     text.required = true;
     text.setAttribute('aria-describedby', 'chief-signals-text-help chief-signals-privacy');
-    const textHelp = element('p', 'chief-signals__note', '3–1,200 characters.');
+    const textHelp = element('p', 'chief-signals__note', context ? '3–' + maximumDraftLength.toLocaleString('en-GB') + ' characters, plus the episode label below.' : '3–1,200 characters.');
     textHelp.id = 'chief-signals-text-help';
     const privacy = element('p', 'chief-signals__privacy', "Optional feedback goes privately to the AI-assisted development team; don't include passwords, keys or personal details. Anonymous session marker used only to avoid duplicate counts.");
     privacy.id = 'chief-signals-privacy';
@@ -158,7 +182,18 @@
     feedbackStatus.id = 'chief-signals-feedback-status';
     feedbackStatus.setAttribute('role', 'status');
     feedbackStatus.setAttribute('aria-live', 'polite');
+    if (context) {
+      const about = element('p', 'chief-signals__note', 'Included only when you send: ' + context.label + '.');
+      about.id = 'chief-signals-context';
+      text.setAttribute('aria-describedby', 'chief-signals-text-help chief-signals-context chief-signals-privacy');
+      append(form, element('p', 'chief-signals__note', 'What did you choose, what did you expect, and what happened? One useful observation is enough. If you are returning, you may mention that; it is not inferred from your visit.'), about);
+    }
     append(form, topicLabel, topic, textLabel, text, textHelp, privacy, trap, submit, feedbackStatus);
+    if (context) {
+      const returnLink = element('a', 'chief-signals__office-link', context.returnLabel);
+      returnLink.setAttribute('href', context.returnHref + (preview ? '?chief_preview=1' : ''));
+      append(form, returnLink, element('p', 'chief-signals__note', 'Feedback is optional. You can return to the game without sending.'));
+    }
     append(panel, append(details, form));
     const footer = document.querySelector('footer');
     if (footer && footer.parentNode) footer.parentNode.insertBefore(panel, footer);
@@ -230,15 +265,15 @@
       const draft = text.value;
       const selectedTopic = topic.value;
       if (honeypot.value) { feedbackStatus.textContent = DELIVERY_FAILURE; return; }
-      if (!TOPICS.includes(selectedTopic) || typeof draft !== 'string' || draft.trim().length < 3 || draft.length > 1200) {
-        feedbackStatus.textContent = 'Choose a topic and write feedback of 3–1,200 characters.';
+      if (!TOPICS.includes(selectedTopic) || typeof draft !== 'string' || draft.trim().length < 3 || draft.length > maximumDraftLength) {
+        feedbackStatus.textContent = 'Choose a topic and write feedback of 3–' + maximumDraftLength.toLocaleString('en-GB') + ' characters.';
         return;
       }
-      if (!pendingAttempt || pendingAttempt.topic !== selectedTopic || pendingAttempt.text !== draft) {
+      if (!pendingAttempt || pendingAttempt.topic !== selectedTopic || pendingAttempt.draft !== draft) {
         let requestId = null;
         try { requestId = randomUUID(); } catch (_) { /* Keep the form when a secure random ID is unavailable. */ }
         if (!requestId) { feedbackStatus.textContent = DELIVERY_FAILURE; return; }
-        pendingAttempt = { request_id: requestId, topic: selectedTopic, text: draft };
+        pendingAttempt = { request_id: requestId, topic: selectedTopic, text: contextPrefix + draft, draft };
       }
       const attempt = pendingAttempt;
       busy(true, true);
@@ -247,7 +282,7 @@
         const result = await post({ action: 'feedback', site, session, request_id: attempt.request_id, topic: attempt.topic, text: attempt.text });
         if (result.feedback_saved !== true || (preview && result.preview !== true)) throw new Error('Unconfirmed feedback');
         renderStats(result.stats, result.intake_limit);
-        if (text.value === attempt.text && topic.value === attempt.topic) text.value = '';
+        if (text.value === attempt.draft && topic.value === attempt.topic) text.value = '';
         pendingAttempt = null;
         feedbackStatus.textContent = preview ? 'Test feedback saved privately; excluded from public counts.' : 'Feedback received. Thank you for helping the office improve.';
       } catch (_) { feedbackStatus.textContent = DELIVERY_FAILURE; }
@@ -260,6 +295,14 @@
       return;
     }
     counts('visit');
+    function openRequestedFeedback() {
+      if (context && window.location?.hash === '#game-feedback') {
+        details.open = true;
+        if (typeof details.scrollIntoView === 'function') details.scrollIntoView({ block: 'start' });
+      }
+    }
+    openRequestedFeedback();
+    if (typeof window.addEventListener === 'function') window.addEventListener('hashchange', openRequestedFeedback);
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once: true });

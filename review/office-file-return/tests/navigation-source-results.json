@@ -1,0 +1,142 @@
+{
+  "status": "PASS",
+  "internal_links": 27,
+  "method": "HTML href and fragment resolution including two script-generated signal anchors; not browser navigation",
+  "links": [
+    {
+      "from": "index.html",
+      "to": "index.html",
+      "href": "#office"
+    },
+    {
+      "from": "index.html",
+      "to": "index.html",
+      "href": "#office"
+    },
+    {
+      "from": "index.html",
+      "to": "personnel-game.html",
+      "href": "personnel-game.html"
+    },
+    {
+      "from": "index.html",
+      "to": "index.html",
+      "href": "#deck"
+    },
+    {
+      "from": "index.html",
+      "to": "index.html",
+      "href": "#office-life"
+    },
+    {
+      "from": "index.html",
+      "to": "index.html",
+      "href": "#office-noticeboard"
+    },
+    {
+      "from": "index.html",
+      "to": "personnel-game.html",
+      "href": "personnel-game.html"
+    },
+    {
+      "from": "index.html",
+      "to": "index.html",
+      "href": "#deck"
+    },
+    {
+      "from": "index.html",
+      "to": "case-021.html",
+      "href": "case-021.html#coffee-desk"
+    },
+    {
+      "from": "index.html",
+      "to": "index.html",
+      "href": "#office"
+    },
+    {
+      "from": "index.html",
+      "to": "personnel-game.html",
+      "href": "personnel-game.html"
+    },
+    {
+      "from": "index.html",
+      "to": "index.html",
+      "href": "#office-life"
+    },
+    {
+      "from": "index.html",
+      "to": "case-021.html",
+      "href": "case-021.html"
+    },
+    {
+      "from": "index.html",
+      "to": "personnel-game.html",
+      "href": "personnel-game.html"
+    },
+    {
+      "from": "index.html",
+      "to": "index.html",
+      "href": "#office"
+    },
+    {
+      "from": "personnel-game.html",
+      "to": "index.html",
+      "href": "index.html"
+    },
+    {
+      "from": "personnel-game.html",
+      "to": "personnel-game.html",
+      "href": "#office-noticeboard"
+    },
+    {
+      "from": "personnel-game.html",
+      "to": "case-021.html",
+      "href": "case-021.html"
+    },
+    {
+      "from": "personnel-game.html",
+      "to": "personnel-game.html",
+      "href": "#game-feedback"
+    },
+    {
+      "from": "case-021.html",
+      "to": "case-021.html",
+      "href": "#coffee-desk"
+    },
+    {
+      "from": "case-021.html",
+      "to": "personnel-game.html",
+      "href": "personnel-game.html"
+    },
+    {
+      "from": "case-021.html",
+      "to": "index.html",
+      "href": "index.html?file=021#office-life"
+    },
+    {
+      "from": "case-021.html",
+      "to": "personnel-game.html",
+      "href": "personnel-game.html"
+    },
+    {
+      "from": "case-021.html",
+      "to": "index.html",
+      "href": "index.html?feedback=coffee-20261015-review#game-feedback"
+    },
+    {
+      "from": "case-021.html",
+      "to": "index.html",
+      "href": "index.html?file=021#office-life"
+    },
+    {
+      "from": "case-021.html",
+      "to": "personnel-game.html",
+      "href": "personnel-game.html"
+    },
+    {
+      "from": "case-021.html",
+      "to": "index.html",
+      "href": "index.html?file=021#office-life"
+    }
+  ]
+}

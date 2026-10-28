@@ -1,0 +1,74 @@
+{
+  "pass": true,
+  "office_resume_phases": 5,
+  "preview_internal_links_preserved": true,
+  "bfcache_and_cross_tab_reconcile": true,
+  "bfcache_memory_return_cases": 3,
+  "bfcache_changed_store_and_clear_win": true,
+  "bfcache_own_save_and_replay_stable": true,
+  "reload_phase_checks": 36,
+  "invalid_saves_rejected": 5,
+  "blocked_storage_playable": true,
+  "office_clear_removes_coffee": true,
+  "original_receipts_unchanged": 6,
+  "optional_return_routes": [
+    {
+      "route": "plain/show/teach",
+      "title": "Two teachers. One late task."
+    },
+    {
+      "route": "plain/show/chief",
+      "title": "One deadline kept. One lesson waiting."
+    },
+    {
+      "route": "plain/point/show",
+      "title": "The sentence gets a demonstration."
+    },
+    {
+      "route": "plain/point/pair",
+      "title": "Help has an actual name."
+    },
+    {
+      "route": "sign/replace/backup",
+      "title": "An exception with a handover."
+    },
+    {
+      "route": "sign/replace/batch",
+      "title": "Coffee made. Time spent."
+    },
+    {
+      "route": "sign/audit/release",
+      "title": "The record steps out of the doorway."
+    },
+    {
+      "route": "sign/audit/finish",
+      "title": "An orderly file. A later break."
+    },
+    {
+      "route": "none/assign/split",
+      "title": "One responsibility. Two useful hands."
+    },
+    {
+      "route": "none/assign/round",
+      "title": "A predictable round."
+    },
+    {
+      "route": "none/wait/volunteer",
+      "title": "A favor fixes today."
+    },
+    {
+      "route": "none/wait/rotate",
+      "title": "Someone has joined the next shift."
+    }
+  ],
+  "contextual_primary_ctas": 6,
+  "replay_secondary_and_available": true,
+  "invalid_actions_or_contexts_rejected": 56,
+  "allowed_feedback_contexts": 42,
+  "legacy_contexts_unchanged": 24,
+  "replay_resets": 12,
+  "cross_route_replay_cta_resets": 12,
+  "network_requests_sent": 0,
+  "storage_scope": "chief-coffee-shift-v1 only; personnel preserved except explicit office clear",
+  "method": "Actual inline UI and feedback parser in minimal simulated DOM; no browser/layout/physical-device claims."
+}

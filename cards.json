@@ -197,5 +197,22 @@
     "alt": "Original cream robot Chief gives a reluctant thumbs-up to an old desk fan in the amber server room. CASE-020, RESPECT: The Fan Takes the Shift. The fan completed its shift without announcing a new era. Repair: keep one useful thing running and record what it did. Return: name one small thing that worked quietly.",
     "fictional": true,
     "theme_family": "office"
+  },
+  {
+    "number": "021",
+    "code": "CASE-021",
+    "title": "The Coffee Has Terms",
+    "disposition": "ROAST",
+    "incident": "Chief holds a modest coffee cup while an absurd terms stack marked COFFEE POLICY blocks it. The intern asks which page contains the coffee.",
+    "verdict": "The coffee comes with twenty-seven pages of terms. It still tastes like coffee.",
+    "repair": "Keep the useful instruction. Remove the ceremony between a person and their cup.",
+    "return_ticket": "Replace one office rule with one plain sentence. Chief will read it before the coffee cools.",
+    "chief_note": "Clause twenty-eight permits disappointment.",
+    "image": "assets/chief-case-021.png",
+    "width": 1024,
+    "height": 1536,
+    "alt": "Chief holds a modest coffee cup behind an absurd stack marked COFFEE POLICY; an office fan stands in the background.",
+    "fictional": true,
+    "theme_family": "office"
   }
 ]
