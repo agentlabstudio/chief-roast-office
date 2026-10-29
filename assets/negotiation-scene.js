@@ -26,12 +26,13 @@
         <button type="button" data-layout-choice="cat-desk" aria-pressed="false">The cat takes the desk</button>
       </div>
       <p class="negotiation__result" role="status" aria-live="polite"></p>
-      <div class="negotiation__box" hidden><button type="button" class="negotiation__open">Open the contract box</button><p class="negotiation__box-result" hidden></p></div>
+      <div class="negotiation__box" hidden><div class="negotiation__box-art" data-open="false" aria-hidden="true"><span class="negotiation__paper">✦</span><span class="negotiation__lid"></span></div><button type="button" class="negotiation__open">Open the contract box</button><p class="negotiation__box-result" hidden></p></div>
       <p class="negotiation__save" aria-live="polite"></p>`;
     intro.insertAdjacentElement('afterend', section);
     const stage = section.querySelector('.negotiation__stage');
     const result = section.querySelector('.negotiation__result');
     const box = section.querySelector('.negotiation__box');
+    const boxArt = section.querySelector('.negotiation__box-art');
     const boxResult = section.querySelector('.negotiation__box-result');
     const open = section.querySelector('.negotiation__open');
     const saveNote = section.querySelector('.negotiation__save');
@@ -41,6 +42,7 @@
       section.querySelectorAll('[data-layout-choice]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.layoutChoice === layout)));
       result.textContent = layout === 'cat-desk' ? 'The cat takes the chair. Chief studies the new terms: “Finally. Someone who negotiates.”' : layout === 'chief-desk' ? 'Chief keeps the desk. The cat places a paw on the contract anyway. “A formidable counteroffer.”' : 'Choose a seat to begin. You can change it later.';
       box.hidden = !state;
+      boxArt.dataset.open = String(!!(state && state.boxOpened));
       open.hidden = !!(state && state.boxOpened);
       boxResult.hidden = !(state && state.boxOpened);
       boxResult.textContent = state && state.boxOpened ? 'Inside: one contract, two signature spaces, and a paw print exactly where Chief planned to sign.' : '';
