@@ -22,7 +22,7 @@
         <div class="negotiation__seat negotiation__seat--right" aria-hidden="true">GUEST</div>
         <div class="negotiation__character negotiation__chief" role="img" aria-label="Chief"></div>
         <div class="negotiation__character negotiation__cat" role="img" aria-label="The cat"></div>
-        <div class="negotiation__desk" aria-hidden="true"><span>CONTRACT</span></div>
+        <div class="negotiation__desk" aria-hidden="true"><span class="negotiation__desk-sign">CONTRACT</span></div>
       </div>
       <div class="negotiation__choices" aria-label="Choose who sits at the desk">
         <button type="button" data-layout-choice="chief-desk" aria-pressed="false">Chief takes the desk</button>
@@ -41,6 +41,7 @@
     const saveNote = section.querySelector('.negotiation__save');
     const terms = section.querySelector('.negotiation__terms');
     const termResult = section.querySelector('.negotiation__term-result');
+    const deskSign = section.querySelector('.negotiation__desk-sign');
     function render() {
       const layout = state ? state.layout : 'unselected';
       stage.dataset.layout = layout;
@@ -51,6 +52,7 @@
       open.hidden = !!(state && state.boxOpened);
       boxResult.hidden = !(state && state.boxOpened);
       terms.hidden = !(state && state.boxOpened);
+      deskSign.textContent = term === 'coffee' ? 'ESPRESSO PROTECTED' : term === 'naps' ? 'NAP IN PROGRESS' : 'CONTRACT';
       section.querySelectorAll('[data-term]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.term === term)));
       termResult.textContent = term === 'coffee' ? 'OFFICE RULE: Espresso is protected. The cat has reserved the saucer.' : term === 'naps' ? 'OFFICE RULE: Naps are protected. Chief has scheduled an emergency nap review.' : 'Choose a clause. You can change it later.';
       boxResult.textContent = state && state.boxOpened ? 'Inside: one contract, two signature spaces, and a paw print exactly where Chief planned to sign.' : '';
@@ -76,3 +78,4 @@
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, {once:true}); else init();
 })();
+
