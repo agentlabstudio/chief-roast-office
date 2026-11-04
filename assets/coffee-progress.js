@@ -28,11 +28,7 @@
     try { localStorage.removeItem(key); return localStorage.getItem(key) === null; } catch (_) { return false; }
   }
   window.chiefCoffeeProgress = {key,validate,read,write,clear};
-  document.addEventListener('chief:local-clear', event => {
-    const cleared = clear();
-    if (event.detail) event.detail.coffeeCleared = cleared;
-    resume();
-  });
+  document.addEventListener('chief:local-clear', resume);
   // QA mode follows internal navigation, so a review never becomes an audience visit.
   if (new URLSearchParams(window.location.search).get('chief_preview') === '1') {
     for (const link of document.querySelectorAll('a[href]')) {
