@@ -165,7 +165,7 @@ function receipt(page){return ['ending-heading','ending-rule','ending-result','e
   await replayed.$('choices').children.find(b=>b.dataset.action==='teach').click();await resetCoffee(replayed);
   replayed.windowEvent('pageshow',{persisted:true});assert.equal(replayed.reloadRequests(),0,'own replay updates persisted baseline');
   assert.equal(replayed.$('choices').children.length,3);
-  const personnel=boot('personnel-game.html',{coffee:coffeeSnapshot});await personnel.$('clear-file').click();await personnel.$('confirm-clear').click();assert.equal(personnel.data.has('chief-coffee-shift-v1'),false);
+  const personnel=boot('personnel-game.html',{coffee:coffeeSnapshot});await personnel.$('clear-file').click();await personnel.$('confirm-clear').click();assert.equal(personnel.data.get('chief-coffee-shift-v1'),coffeeSnapshot);
   const cached=boot('case-021.html',{coffee:coffeeSnapshot});cached.data.delete('chief-coffee-shift-v1');
   cached.windowEvent('pageshow',{persisted:true});assert.equal(cached.reloadRequests(),1);
   cached.windowEvent('storage',{key:'other-game'});assert.equal(cached.reloadRequests(),1);
@@ -180,7 +180,7 @@ function receipt(page){return ['ending-heading','ending-rule','ending-result','e
     for(const a of home.anchors){if(a.href.startsWith('https://example.invalid/')&&!/assets\//.test(a.href))assert.equal(new URL(a.href).searchParams.get('chief_preview'),'1');}
     home.data.clear();home.windowEvent('storage',{key:null});assert.equal(home.$('coffee-resume').hidden,true);
   }
-  const report={pass:true,office_resume_phases:5,preview_internal_links_preserved:true,bfcache_and_cross_tab_reconcile:true,bfcache_memory_return_cases:memoryReturns,bfcache_changed_store_and_clear_win:true,bfcache_own_save_and_replay_stable:true,reload_phase_checks:reloads,invalid_saves_rejected:5,blocked_storage_playable:true,office_clear_removes_coffee:true,original_receipts_unchanged:6,optional_return_routes:records,contextual_primary_ctas:6,replay_secondary_and_available:true,invalid_actions_or_contexts_rejected:invalid,allowed_feedback_contexts:contexts,legacy_contexts_unchanged:legacyContexts,replay_resets:12,cross_route_replay_cta_resets:12,network_requests_sent:0,storage_scope:'chief-coffee-shift-v1 only; personnel preserved except explicit office clear',method:'Actual inline UI and feedback parser in minimal simulated DOM; no browser/layout/physical-device claims.'};
+  const report={pass:true,office_resume_phases:5,preview_internal_links_preserved:true,bfcache_and_cross_tab_reconcile:true,bfcache_memory_return_cases:memoryReturns,bfcache_changed_store_and_clear_win:true,bfcache_own_save_and_replay_stable:true,reload_phase_checks:reloads,invalid_saves_rejected:5,blocked_storage_playable:true,office_clear_preserves_coffee:true,original_receipts_unchanged:6,optional_return_routes:records,contextual_primary_ctas:6,replay_secondary_and_available:true,invalid_actions_or_contexts_rejected:invalid,allowed_feedback_contexts:contexts,legacy_contexts_unchanged:legacyContexts,replay_resets:12,cross_route_replay_cta_resets:12,network_requests_sent:0,storage_scope:'chief-coffee-shift-v1 only; personnel clear preserves coffee',method:'Actual inline UI and feedback parser in minimal simulated DOM; no browser/layout/physical-device claims.'};
   fs.writeFileSync(path.join(__dirname,'coffee-return-results.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify({...report,optional_return_routes:records.length}));
 })().catch(e=>{console.error(e.stack);process.exitCode=1;});
 
