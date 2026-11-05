@@ -29,7 +29,7 @@
         <button type="button" data-layout-choice="cat-desk" aria-pressed="false">The cat takes the desk</button>
       </div>
       <p class="negotiation__result" role="status" aria-live="polite"></p>
-      <div class="negotiation__box" hidden><div class="negotiation__box-art" data-open="false" aria-hidden="true"><span class="negotiation__paper">✦</span><span class="negotiation__lid"></span></div><button type="button" class="negotiation__open">Open the contract box</button><p class="negotiation__box-result" hidden></p></div>
+      <div class="negotiation__box" hidden><div class="negotiation__box-art" data-open="false" data-use="none" aria-hidden="true"><span class="negotiation__paper">✦</span><span class="negotiation__box-cat"></span><span class="negotiation__cup"><span class="negotiation__steam">∿</span></span><span class="negotiation__lid"></span></div><button type="button" class="negotiation__open">Open the contract box</button><p class="negotiation__box-result" hidden></p></div>
       <div class="negotiation__terms" hidden><h3>The contract needs a clause</h3><p>Both executives insist this is non-negotiable. Choose the office rule.</p><div class="negotiation__choices"><button type="button" data-term="coffee" aria-pressed="false">Protect the espresso</button><button type="button" data-term="naps" aria-pressed="false">Protect the nap</button></div><p class="negotiation__term-result" role="status" aria-live="polite"></p></div><p class="negotiation__save" aria-live="polite"></p>`;
     intro.insertAdjacentElement('afterend', section);
     const stage = section.querySelector('.negotiation__stage');
@@ -49,12 +49,13 @@
       result.textContent = layout === 'cat-desk' ? 'The cat takes the chair. Chief studies the new terms: “Finally. Someone who negotiates.”' : layout === 'chief-desk' ? 'Chief keeps the desk. The cat places a paw on the contract anyway. “A formidable counteroffer.”' : 'Choose a seat to begin. You can change it later.';
       box.hidden = !state;
       boxArt.dataset.open = String(!!(state && state.boxOpened));
+      boxArt.dataset.use = state && state.boxOpened && term ? term : 'none';
       open.hidden = !!(state && state.boxOpened);
       boxResult.hidden = !(state && state.boxOpened);
       terms.hidden = !(state && state.boxOpened);
       deskSign.textContent = term === 'coffee' ? 'ESPRESSO PROTECTED' : term === 'naps' ? 'NAP IN PROGRESS' : 'CONTRACT';
       section.querySelectorAll('[data-term]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.term === term)));
-      termResult.textContent = term === 'coffee' ? 'OFFICE RULE: Espresso is protected. The cat has reserved the saucer.' : term === 'naps' ? 'OFFICE RULE: Naps are protected. Chief has scheduled an emergency nap review.' : 'Choose a clause. You can change it later.';
+      termResult.textContent = term === 'coffee' ? 'OFFICE RULE: Espresso is protected. The open box is now its sheltered place.' : term === 'naps' ? 'OFFICE RULE: Naps are protected. The cat has claimed the open box as a bed.' : 'Choose a clause. You can change it later.';
       boxResult.textContent = state && state.boxOpened ? 'Inside: one contract, two signature spaces, and a paw print exactly where Chief planned to sign.' : '';
     }
     function persist() {
