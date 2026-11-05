@@ -26,9 +26,9 @@ test('choice, box and changes survive reload while other saves remain intact',()
 test('clause changes desk sign and restores both alternatives after reload',()=>{
  const data=new Map();const storage={getItem:k=>data.get(k)??null,setItem:(k,v)=>data.set(k,v)};
  let p=makePage(storage);assert.equal(p.deskSign.textContent,'CONTRACT');p.cat.click();p.open.click();assert.equal(p.terms.hidden,false);
- p.coffee.click();assert.equal(p.deskSign.textContent,'ESPRESSO PROTECTED');assert.equal(p.coffee.attrs['aria-pressed'],'true');
- p=makePage(storage);assert.equal(p.deskSign.textContent,'ESPRESSO PROTECTED');p.naps.click();assert.equal(p.deskSign.textContent,'NAP IN PROGRESS');
- p=makePage(storage);assert.equal(p.deskSign.textContent,'NAP IN PROGRESS');assert.equal(p.naps.attrs['aria-pressed'],'true');
+ p.coffee.click();assert.equal(p.deskSign.textContent,'ESPRESSO PROTECTED');assert.equal(p.boxArt.dataset.use,'coffee');assert.equal(p.coffee.attrs['aria-pressed'],'true');
+ p=makePage(storage);assert.equal(p.deskSign.textContent,'ESPRESSO PROTECTED');assert.equal(p.boxArt.dataset.use,'coffee');p.naps.click();assert.equal(p.deskSign.textContent,'NAP IN PROGRESS');assert.equal(p.boxArt.dataset.use,'naps');
+ p=makePage(storage);assert.equal(p.deskSign.textContent,'NAP IN PROGRESS');assert.equal(p.boxArt.dataset.use,'naps');assert.equal(p.naps.attrs['aria-pressed'],'true');
 });
 test('clause works for visit when storage is blocked',()=>{
  const storage={getItem(){throw Error('blocked')},setItem(){throw Error('blocked')}};const p=makePage(storage);
