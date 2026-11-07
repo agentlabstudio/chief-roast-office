@@ -22,3 +22,15 @@
 @media(prefers-reduced-motion:reduce){.chief-stage__figure *{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
 @media print{.chief-stage__figure{display:none!important}}
 
+
+/* The same paperwork moves between the two workstations. */
+.chief-stage__media{position:relative}
+.chief-stage__paper-stack{position:absolute;width:8%;height:4%;background:#fff4d7;border:1px solid #6e4c2d;box-shadow:2px 2px #d7bc8e,4px 4px #795a3b;transform:rotate(-4deg);pointer-events:none}
+.chief-stage__paper-stack[data-location="chief"]{left:31%;top:70%}
+.chief-stage__paper-stack[data-location="printer"]{left:82%;top:39%}
+.chief-stage__figure .chief-stage__paper-heading{margin:20px 0 8px;font:700 14px/1.4 ui-sans-serif,system-ui,sans-serif;color:#443a2b}
+.chief-stage__paper-choice{display:flex;flex-wrap:wrap;gap:8px}
+.chief-stage__paper-button{min-height:44px;padding:8px 12px;border:1px solid #8b6230;border-radius:5px;background:#f6eedc;color:#443a2b;font:650 12px/1.4 ui-sans-serif,system-ui,sans-serif;cursor:pointer}
+.chief-stage__paper-button[aria-pressed="true"]{background:#8b6230;color:white}
+.chief-stage__paper-button:focus-visible{outline:3px solid #8b6230;outline-offset:3px}
+.chief-stage__figure .chief-stage__paper-status{margin:8px 0 0;font:12px/1.5 ui-sans-serif,system-ui,sans-serif;color:#5e4b31}

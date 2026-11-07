@@ -47,7 +47,10 @@
       illustration.hidden = false;
       unavailable.hidden = true;
     });
-    append(media, illustration, unavailable);
+    const paperStack = html('div', 'chief-stage__paper-stack');
+    paperStack.hidden = true;
+    paperStack.setAttribute('aria-hidden', 'true');
+    append(media, illustration, unavailable, paperStack);
 
     const caption = html('figcaption', 'chief-stage__caption');
     const heading = html('h2', 'chief-stage__room', 'Chief’s office');
@@ -69,6 +72,62 @@
     const title = html('h3', 'chief-stage__title');
     const chiefLine = html('p', 'chief-stage__reply');
     const stampText = html('p', 'chief-stage__stamp');
+    const paperChoice = html('div', 'chief-stage__paper-choice');
+    const paperHeading = html('h3', 'chief-stage__paper-heading', 'Who handles the paperwork?');
+    const paperStatus = html('p', 'chief-stage__paper-status');
+    paperStatus.setAttribute('role', 'status');
+    paperStatus.setAttribute('aria-live', 'polite');
+    const paperKey = 'chief-office-paperwork-v1';
+    let paperLocation = null;
+    let paperStorage = null;
+    try {
+      paperStorage = window.localStorage;
+      const saved = paperStorage.getItem(paperKey);
+      if (saved === 'chief' || saved === 'printer') paperLocation = saved;
+    } catch (_) { paperStorage = null; }
+    const paperButtons = {};
+    function renderPaper(message) {
+      paperStack.hidden = !paperLocation || illustration.hidden;
+      paperStack.dataset.location = paperLocation || '';
+      for (const [location, button] of Object.entries(paperButtons)) {
+        button.setAttribute('aria-pressed', String(location === paperLocation));
+      }
+      paperStatus.textContent = message || (paperLocation
+        ? 'The paperwork is at ' + (paperLocation === 'chief' ? 'Chief’s desk.' : 'the printer.')
+        : 'Choose where the paperwork goes. You can change your mind.');
+    }
+    for (const [location, label] of [['chief', 'Chief handles it'], ['printer', 'Printer handles it']]) {
+      const button = html('button', 'chief-stage__paper-button', label);
+      button.type = 'button';
+      paperButtons[location] = button;
+      button.addEventListener('click', function () {
+        paperLocation = location;
+        let saved = false;
+        try {
+          if (paperStorage) {
+            paperStorage.setItem(paperKey, location);
+            saved = true;
+          }
+        } catch (_) {}
+        renderPaper(saved ? '' : 'Choice active for this visit; this browser could not save it.');
+      });
+      paperChoice.appendChild(button);
+    }
+    document.addEventListener('chief:local-clear', function (event) {
+      paperLocation = null;
+      let cleared = false;
+      try {
+        if (paperStorage) {
+          paperStorage.removeItem(paperKey);
+          cleared = paperStorage.getItem(paperKey) === null;
+        }
+      } catch (_) {}
+      if (event.detail && !cleared) event.detail.repairCleared = false;
+      renderPaper();
+    });
+    illustration.addEventListener('error', function () { renderPaper(); });
+    illustration.addEventListener('load', function () { renderPaper(); });
+    renderPaper();
     const actions = html('nav', 'chief-stage__actions');
     actions.setAttribute('aria-label', 'Office scene navigation');
     const shiftLink = html('a', 'chief-stage__link', 'Go to the shift ↓');
@@ -76,7 +135,7 @@
     const officeLink = html('a', 'chief-stage__link', 'Back to the office ↗');
     officeLink.href = 'index.html#office-life';
     append(actions, shiftLink, officeLink);
-    append(caption, heading, departments, status, title, chiefLine, stampText, actions);
+    append(caption, heading, departments, status, title, chiefLine, stampText, paperHeading, paperChoice, paperStatus, actions);
     append(figure, media, caption);
     grid.parentNode.insertBefore(figure, grid);
 
